@@ -1,16 +1,125 @@
-<p style="color: green"><%= notice %></p>
+<div class="container mt-4">
+  <!-- 🔹 Cabeçalho -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0 fw-bold text-primary">
+      <i class="fas fa-users me-2"></i>
+      Pacientes Cadastrados
+    </h2>
 
-<% content_for :title, "Pacientes" %>
+    <%= link_to new_paciente_path, class: "btn btn-primary shadow-sm px-3" do %>
+      <i class="fas fa-plus me-1"></i> Novo Paciente
+    <% end %>
+  </div>
 
-<h1>Pacientes</h1>
+  <!-- 🔍 Filtro de busca -->
+  <div class="card shadow-sm mb-4 border-0">
+    <div class="card-body">
+      <%= search_form_for @q, url: pacientes_path, method: :get, html: { class: "row gy-3 gx-3" } do |f| %>
+        <div class="col-md-3">
+          <%= f.label :nome_cont, "Nome", class: "form-label fw-semibold" %>
+          <%= f.search_field :nome_cont, class: "form-control", placeholder: "Buscar por nome..." %>
+        </div>
 
-<div id="pacientes">
-  <% @pacientes.each do |paciente| %>
-    <%= render paciente %>
-    <p>
-      <%= link_to "Show this paciente", paciente %>
-    </p>
-  <% end %>
+        <div class="col-md-3">
+          <%= f.label :cpf_cont, "CPF", class: "form-label fw-semibold" %>
+          <%= f.search_field :cpf_cont, class: "form-control", placeholder: "Buscar por CPF..." %>
+        </div>
+
+        <div class="col-md-3">
+          <%= f.label :email_cont, "Email", class: "form-label fw-semibold" %>
+          <%= f.search_field :email_cont, class: "form-control", placeholder: "Buscar por email..." %>
+        </div>
+
+        <div class="col-md-2">
+          <%= f.label :sexo_eq, "Sexo", class: "form-label fw-semibold" %>
+          <%= f.select :sexo_eq,
+                [["Masculino", "masculino"], ["Feminino", "feminino"], ["Indefinido", "indefinido"]],
+                { include_blank: "Todos" },
+                class: "form-select" %>
+        </div>
+
+        <div class="col-md-1 d-flex align-items-end">
+          <%= f.submit "Filtrar", class: "btn btn-success w-100" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- 📋 Tabela -->
+  <div class="card shadow-sm border-0">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-primary text-center">
+          <tr>
+            <th><%= sort_link(@q, :nome, "Nome") %></th>
+            <th>Nome Social</th>
+            <th><%= sort_link(@q, :cpf, "CPF") %></th>
+            <th>Sexo</th>
+            <th>Data Nascimento</th>
+            <th>Celular</th>
+            <th>Email</th>
+            <th>Horário</th>
+            <th>Observação</th>
+            <th class="text-end">Ações</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% if @pacientes.any? %>
+            <% @pacientes.each do |paciente| %>
+              <tr class="text-center">
+                <td><%= paciente.nome %></td>
+                <td><%= paciente.nome_social.presence || "-" %></td>
+                <td><%= paciente.cpf %></td>
+                <td><%= paciente.sexo.presence&.capitalize || "-" %></td>
+                <td><%= paciente.data_nascimento&.strftime("%d/%m/%Y") || "-" %></td>
+                <td><%= paciente.celular.presence || "-" %></td>
+                <td><%= paciente.email.presence || "-" %></td>
+                <td><%= paciente.horario.presence || "-" %></td>
+                <td><%= truncate(paciente.observacao, length: 35) if paciente.observacao.present? %></td>
+
+                <td class="text-end">
+                  <%= link_to paciente, class: "btn btn-sm btn-outline-primary me-1", title: "Visualizar", data: { bs_toggle: "tooltip" } do %>
+                    <i class="fas fa-eye"></i>
+                  <% end %>
+
+                  <%= link_to edit_paciente_path(paciente), class: "btn btn-sm btn-outline-success me-1", title: "Editar", data: { bs_toggle: "tooltip" } do %>
+                    <i class="fas fa-edit"></i>
+                  <% end %>
+
+                  <%= link_to paciente,
+                      data: { turbo_method: :delete, turbo_confirm: "Deseja realmente excluir este paciente?" },
+                      class: "btn btn-sm btn-outline-danger", title: "Excluir", data: { bs_toggle: "tooltip" } do %>
+                    <i class="fas fa-trash"></i>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          <% else %>
+            <tr>
+              <td colspan="10" class="text-center py-4 text-muted">
+                <i class="fas fa-info-circle me-2"></i>
+                Nenhum paciente encontrado.
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 📄 Paginação -->
+  <div class="mt-4 d-flex justify-content-center">
+    <%= paginate @pacientes %>
+  </div>
 </div>
 
-<%= link_to "New paciente", new_paciente_path %>
+<!-- 🧠 Tooltip Bootstrap -->
+<script>
+  document.addEventListener("turbo:load", function() {
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+  })
+</script>

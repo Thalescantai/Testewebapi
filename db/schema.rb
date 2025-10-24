@@ -10,11 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_10_22_211556) do
+ActiveRecord::Schema[7.2].define(version: 2025_10_24_031259) do
   create_table "pacientes", force: :cascade do |t|
     t.string "nome"
     t.string "cpf"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "sexo"
+    t.date "data_nascimento"
+    t.string "celular"
+    t.string "email"
+    t.string "nome_social"
+    t.string "horario"
+    t.text "observacao"
   end
 end

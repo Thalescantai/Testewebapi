@@ -3,8 +3,10 @@ class PacientesController < ApplicationController
 
   # GET /pacientes or /pacientes.json
   def index
-    @pacientes = Paciente.all
+    @q = Paciente.ransack(params[:q])
+    @pacientes = @q.result.order(created_at: :desc).page(params[:page]).per(10)
   end
+
 
   # GET /pacientes/1 or /pacientes/1.json
   def show
@@ -65,6 +67,16 @@ class PacientesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def paciente_params
-      params.require(:paciente).permit(:nome, :cpf)
+       params.require(:paciente).permit(
+        :nome,
+        :cpf,
+        :sexo,
+        :data_nascimento,
+        :celular,
+        :email,
+        :nome_social,
+        :horario,
+        :observacao
+  )
     end
 end

@@ -1,0 +1,25 @@
+<%= paginator.render do %>
+  <nav aria-label="Paginação">
+    <ul class="pagination justify-content-center mb-0">
+      <%= prev_page_tag class: "page-item" do %>
+        <span class="page-link">&laquo; Anterior</span>
+      <% end %>
+
+      <% each_page do |page| %>
+        <% if page.left_outer? || page.right_outer? || page.inside_window? %>
+          <li class="page-item <%= 'active' if page.current? %>">
+            <%= link_to page, page.path, class: "page-link" %>
+          </li>
+        <% elsif !page.was_truncated? %>
+          <li class="page-item disabled">
+            <span class="page-link">&hellip;</span>
+          </li>
+        <% end %>
+      <% end %>
+
+      <%= next_page_tag class: "page-item" do %>
+        <span class="page-link">Próxima &raquo;</span>
+      <% end %>
+    </ul>
+  </nav>
+<% end %>
