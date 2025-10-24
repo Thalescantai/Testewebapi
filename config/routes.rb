@@ -1,5 +1,13 @@
 Rails.application.routes.draw do
+  get "endereco/index"
+  get "endereco/show"
+  get "endereco/new"
+  get "endereco/edit"
+  get "endereco/create"
+  get "endereco/update"
+  get "endereco/destroy"
   resources :pacientes
+  resources :endereco
 
   # Define a view principal (home)
   root "pacientes#index"

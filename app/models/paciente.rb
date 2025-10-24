@@ -1,4 +1,7 @@
 class Paciente < ApplicationRecord
+  has_one :endereco, dependent: :destroy
+  accepts_nested_attributes_for :endereco
+
   # Campos que podem ser pesquisados pelo Ransack
   def self.ransackable_attributes(auth_object = nil)
     %w[
