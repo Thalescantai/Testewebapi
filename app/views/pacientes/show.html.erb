@@ -10,7 +10,7 @@
   <div class="card shadow-sm border-0">
     <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
       <h4 class="mb-0 fw-semibold">
-        <i class="fas fa-user me-2"></i> Detalhes do Paciente
+        <i class="fas fa-user me-2"></i> Dados do Paciente
       </h4>
 
       <div>
@@ -25,61 +25,46 @@
     </div>
 
     <div class="card-body">
+      <!-- 🧍 Dados Pessoais -->
+      <h5 class="text-primary fw-bold mb-3">
+        <i class="fas fa-id-card me-1"></i> Dados Pessoais
+      </h5>
       <div class="row g-3">
-        <div class="col-md-6">
-          <p class="mb-1 text-muted small">Nome</p>
-          <p class="fw-semibold"><%= @paciente.nome.presence || "-" %></p>
-        </div>
+        <div class="col-md-4"><strong>Nome:</strong> <%= @paciente.nome %></div>
+        <div class="col-md-4"><strong>Nome Social:</strong> <%= @paciente.nome_social %></div>
+        <div class="col-md-2"><strong>Sexo:</strong> <%= @paciente.sexo&.capitalize %></div>
+        <div class="col-md-2"><strong>Raça:</strong> <%= @paciente.raca %></div>
+        <div class="col-md-3"><strong>Data Nasc.:</strong> <%= @paciente.data_nascimento&.strftime("%d/%m/%Y") %></div>
+        <div class="col-md-3"><strong>Profissão:</strong> <%= @paciente.profissao %></div>
+        <div class="col-md-3"><strong>Escolaridade:</strong> <%= @paciente.escolaridade %></div>
+        <div class="col-md-3"><strong>Estado Civil:</strong> <%= @paciente.estado_civil %></div>
+      </div>
 
-        <div class="col-md-3">
-          <p class="mb-1 text-muted small">CPF</p>
-          <p class="fw-semibold"><%= @paciente.cpf.presence || "-" %></p>
-        </div>
+      <!-- 📄 Documentos -->
+      <h5 class="text-primary fw-bold mb-3 mt-4">
+        <i class="fas fa-file-alt me-1"></i> Documentos
+      </h5>
+      <div class="row g-3">
+        <div class="col-md-3"><strong>CPF:</strong> <%= @paciente.cpf %></div>
+        <div class="col-md-3"><strong>RG:</strong> <%= @paciente.rg %></div>
+        <div class="col-md-3"><strong>Org. Exp.:</strong> <%= @paciente.org_exp %></div>
+        <div class="col-md-3"><strong>Cartão SUS:</strong> <%= @paciente.cartao_sus %></div>
+      </div>
 
-        <div class="col-md-3">
-          <p class="mb-1 text-muted small">Sexo</p>
-          <% if @paciente.sexo.present? %>
-            <% cor = case @paciente.sexo
-                    when "masculino" then "primary"
-                    when "feminino" then "danger"
-                    else "secondary"
-                    end %>
-            <span class="badge bg-<%= cor %> text-uppercase px-3 py-2"><%= @paciente.sexo %></span>
-          <% else %>
-            <p class="fw-semibold text-muted">-</p>
-          <% end %>
-        </div>
-
-        <div class="col-md-3">
-          <p class="mb-1 text-muted small">Data de Nascimento</p>
-          <p class="fw-semibold">
-            <%= @paciente.data_nascimento&.strftime("%d/%m/%Y") || "-" %>
-          </p>
-        </div>
-
-        <div class="col-md-3">
-          <p class="mb-1 text-muted small">Celular</p>
-          <p class="fw-semibold"><%= @paciente.celular.presence || "-" %></p>
-        </div>
-
-        <div class="col-md-6">
-          <p class="mb-1 text-muted small">Email</p>
-          <p class="fw-semibold"><%= @paciente.email.presence || "-" %></p>
-        </div>
-
-        <div class="col-md-6">
-          <p class="mb-1 text-muted small">Nome Social</p>
-          <p class="fw-semibold"><%= @paciente.nome_social.presence || "-" %></p>
-        </div>
-
-        <div class="col-md-3">
-          <p class="mb-1 text-muted small">Horário</p>
-          <p class="fw-semibold"><%= @paciente.horario.presence || "-" %></p>
-        </div>
-
+      <!-- 🌍 Outras Informações -->
+      <h5 class="text-primary fw-bold mb-3 mt-4">
+        <i class="fas fa-globe me-1"></i> Outras Informações
+      </h5>
+      <div class="row g-3">
+        <div class="col-md-3"><strong>Nacionalidade:</strong> <%= @paciente.nacionalidade %></div>
+        <div class="col-md-3"><strong>Naturalidade:</strong> <%= @paciente.naturalidade %></div>
+        <div class="col-md-6"><strong>Nome da Mãe:</strong> <%= @paciente.nome_mae %></div>
+        <div class="col-md-3"><strong>Celular:</strong> <%= @paciente.celular %></div>
+        <div class="col-md-4"><strong>Email:</strong> <%= @paciente.email %></div>
+        <div class="col-md-2"><strong>Horário:</strong> <%= @paciente.horario %></div>
         <div class="col-12">
-          <p class="mb-1 text-muted small">Observação</p>
-          <div class="border rounded p-2 bg-light">
+          <strong>Observações:</strong>
+          <div class="border rounded p-2 bg-light mt-1">
             <%= @paciente.observacao.presence || "<span class='text-muted'>Sem observações</span>".html_safe %>
           </div>
         </div>

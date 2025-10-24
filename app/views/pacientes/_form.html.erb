@@ -19,6 +19,10 @@
       </div>
     <% end %>
 
+    <!-- 🧍 Dados Pessoais -->
+    <h5 class="text-primary fw-bold mb-3 mt-2">
+      <i class="fas fa-id-card me-1"></i> Dados Pessoais
+    </h5>
     <div class="row g-3">
       <div class="col-md-6">
         <div class="form-floating">
@@ -27,14 +31,21 @@
         </div>
       </div>
 
-      <div class="col-md-3">
+      <div class="col-md-6">
         <div class="form-floating">
-          <%= form.text_field :cpf, class: "form-control", placeholder: "CPF" %>
-          <%= form.label :cpf, "CPF" %>
+          <%= form.text_field :nome_social, class: "form-control", placeholder: "Nome social" %>
+          <%= form.label :nome_social, "Nome social (opcional)" %>
         </div>
       </div>
 
-      <div class="col-md-3">
+      <div class="col-md-4">
+        <div class="form-floating">
+          <%= form.date_field :data_nascimento, class: "form-control" %>
+          <%= form.label :data_nascimento, "Data de Nascimento" %>
+        </div>
+      </div>
+
+      <div class="col-md-4">
         <div class="form-floating">
           <%= form.select :sexo,
                 [["Masculino", "masculino"], ["Feminino", "feminino"], ["Indefinido", "indefinido"]],
@@ -44,44 +55,112 @@
         </div>
       </div>
 
-      <div class="col-md-3">
+      <div class="col-md-4">
         <div class="form-floating">
-          <%= form.date_field :data_nascimento, class: "form-control", placeholder: "Data de Nascimento" %>
-          <%= form.label :data_nascimento, "Data de Nascimento" %>
+          <%= form.text_field :raca, class: "form-control", placeholder: "Raça/Cor" %>
+          <%= form.label :raca, "Raça/Cor" %>
+        </div>
+      </div>
+    </div>
+
+    <!-- 📄 Documentos -->
+    <h5 class="text-primary fw-bold mb-3 mt-4">
+      <i class="fas fa-file-alt me-1"></i> Documentos
+    </h5>
+    <div class="row g-3">
+      <div class="col-md-4">
+        <div class="form-floating">
+          <%= form.text_field :cpf, class: "form-control" %>
+          <%= form.label :cpf, "CPF" %>
         </div>
       </div>
 
-      <div class="col-md-3">
+      <div class="col-md-4">
+        <div class="form-floating">
+          <%= form.text_field :rg, class: "form-control" %>
+          <%= form.label :rg, "RG" %>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="form-floating">
+          <%= form.text_field :org_exp, class: "form-control" %>
+          <%= form.label :org_exp, "Orgão Expedidor" %>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="form-floating">
+          <%= form.text_field :cartao_sus, class: "form-control" %>
+          <%= form.label :cartao_sus, "Cartão SUS" %>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🌍 Outras Informações -->
+    <h5 class="text-primary fw-bold mb-3 mt-4">
+      <i class="fas fa-globe me-1"></i> Outras Informações
+    </h5>
+    <div class="row g-3">
+      <div class="col-md-4">
+        <div class="form-floating">
+          <%= form.text_field :profissao, class: "form-control" %>
+          <%= form.label :profissao, "Profissão" %>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="form-floating">
+          <%= form.text_field :escolaridade, class: "form-control" %>
+          <%= form.label :escolaridade, "Escolaridade" %>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="form-floating">
+          <%= form.text_field :estado_civil, class: "form-control" %>
+          <%= form.label :estado_civil, "Estado Civil" %>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="form-floating">
+          <%= form.text_field :nacionalidade, class: "form-control" %>
+          <%= form.label :nacionalidade, "Nacionalidade" %>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="form-floating">
+          <%= form.text_field :naturalidade, class: "form-control" %>
+          <%= form.label :naturalidade, "Naturalidade" %>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="form-floating">
+          <%= form.text_field :nome_mae, class: "form-control" %>
+          <%= form.label :nome_mae, "Nome da Mãe" %>
+        </div>
+      </div>
+
+      <div class="col-md-4">
         <div class="form-floating">
           <%= form.text_field :celular, class: "form-control", placeholder: "(99) 99999-9999" %>
           <%= form.label :celular, "Celular" %>
         </div>
       </div>
 
-      <div class="col-md-6">
+      <div class="col-md-8">
         <div class="form-floating">
-          <%= form.email_field :email, class: "form-control", placeholder: "Email" %>
+          <%= form.email_field :email, class: "form-control" %>
           <%= form.label :email, "Email" %>
-        </div>
-      </div>
-
-      <div class="col-md-6">
-        <div class="form-floating">
-          <%= form.text_field :nome_social, class: "form-control", placeholder: "Nome social (opcional)" %>
-          <%= form.label :nome_social, "Nome social (opcional)" %>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="form-floating">
-          <%= form.text_field :horario, class: "form-control", placeholder: "Horário" %>
-          <%= form.label :horario, "Horário" %>
         </div>
       </div>
 
       <div class="col-12">
         <div class="form-floating">
-          <%= form.text_area :observacao, class: "form-control", placeholder: "Observações adicionais", rows: 3, style: "height: 100px;" %>
+          <%= form.text_area :observacao, class: "form-control", style: "height: 100px;", placeholder: "Observações..." %>
           <%= form.label :observacao, "Observações" %>
         </div>
       </div>

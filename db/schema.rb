@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_10_24_031259) do
+ActiveRecord::Schema[7.2].define(version: 2025_10_24_173348) do
   create_table "pacientes", force: :cascade do |t|
     t.string "nome"
     t.string "cpf"
@@ -23,5 +23,15 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_24_031259) do
     t.string "nome_social"
     t.string "horario"
     t.text "observacao"
+    t.string "cartao_sus"
+    t.string "profissao"
+    t.string "rg"
+    t.string "org_exp"
+    t.string "escolaridade"
+    t.string "raca"
+    t.string "nacionalidade"
+    t.string "estado_civil"
+    t.string "naturalidade"
+    t.string "nome_mae"
   end
 end
