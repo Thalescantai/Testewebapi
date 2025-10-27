@@ -18,6 +18,27 @@
   </head>
 
   <body>
-    <%= yield %>
+    <header class="app-header" data-controller="menu">
+      <button class="hamburger" type="button" aria-label="Abrir menu" aria-expanded="false" data-action="click->menu#toggle" data-menu-target="button">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="app-title">
+        <%= content_for(:title) || "Testewebapi" %>
+      </div>
+
+      <nav class="menu" data-menu-target="panel" aria-hidden="true">
+        <ul>
+          <li><%= link_to "Pacientes", pacientes_path %></li>
+          <li><%= link_to "Endereços", endereco_index_path %></li>
+        </ul>
+      </nav>
+      <div class="menu-backdrop" data-menu-target="backdrop" data-action="click->menu#close"></div>
+    </header>
+
+    <main class="app-main">
+      <%= yield %>
+    </main>
   </body>
 </html>
