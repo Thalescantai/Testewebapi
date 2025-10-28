@@ -1,51 +1,121 @@
-<div class="container mt-4">
-  <!-- 🔹 Cabeçalho -->
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="fw-bold text-primary mb-0">
-      <i class="fas fa-users me-2"></i> Pacientes Cadastrados
-    </h2>
+<% content_for :title, "Pacientes" %>
 
-    <%= link_to new_paciente_path, class: "btn btn-primary shadow-sm px-3 py-2" do %>
-      <i class="fas fa-plus me-1"></i> Novo Paciente
-    <% end %>
+<div class="container-xl py-4">
+  <% total_registros = @pacientes.respond_to?(:total_count) ? @pacientes.total_count : @pacientes.size %>
+
+  <section class="page-hero">
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-8">
+        <span class="hero-badge">
+          <i class="fas fa-hospital"></i>
+          Santa Casa de Ji-Paraná
+        </span>
+        <h1 class="display-6 fw-semibold mt-3 mb-2">Central de Pacientes</h1>
+        <p class="mb-0 fs-6">
+          Acompanhe os cadastros, atualize informações e mantenha os dados clínicos organizados
+          para toda a equipe assistencial da Santa Casa.
+        </p>
+      </div>
+      <div class="col-lg-4 text-lg-end">
+        <%= link_to new_paciente_path, class: "btn btn-light btn-lg shadow-sm fw-semibold" do %>
+          <i class="fas fa-user-plus me-2"></i> Novo cadastro
+        <% end %>
+      </div>
+    </div>
+  </section>
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-4">
+      <div class="card metrics-card h-100">
+        <div class="card-body">
+          <p class="text-uppercase text-muted small fw-semibold mb-1">Pacientes cadastrados</p>
+          <div class="metric-value"><%= total_registros %></div>
+          <p class="mb-0 text-muted small">Base completa do hospital</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card metrics-card h-100">
+        <div class="card-body">
+          <p class="text-uppercase text-muted small fw-semibold mb-1">Resultado atual</p>
+          <div class="metric-value"><%= @pacientes.size %></div>
+          <% if params[:q].present? %>
+            <p class="mb-0 text-muted small">Filtros ativos para a busca</p>
+          <% else %>
+            <p class="mb-0 text-muted small">Listando os registros mais recentes</p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card metrics-card h-100">
+        <div class="card-body">
+          <p class="text-uppercase text-muted small fw-semibold mb-1">Última atualização</p>
+          <div class="metric-value">
+            <%= l(Time.zone.now, format: "%d/%m/%Y") %>
+          </div>
+          <p class="mb-0 text-muted small">Sincronizado com o prontuário digital</p>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- 🔍 Filtros de Busca -->
   <div class="card shadow-sm border-0 mb-4">
-    <div class="card-body">
+    <div class="card-header bg-white border-0 pb-0">
+      <span class="section-title">
+        <i class="fas fa-search"></i> Filtro inteligente
+      </span>
+    </div>
+    <div class="card-body pt-3">
       <%= search_form_for @q, url: pacientes_path, method: :get, html: { class: "row gy-3 gx-3" } do |f| %>
         <div class="col-md-3">
-          <%= f.label :nome_cont, "Nome", class: "form-label fw-semibold text-secondary" %>
-          <%= f.search_field :nome_cont, class: "form-control shadow-sm", placeholder: "Buscar por nome..." %>
+          <%= f.label :nome_cont, "Nome", class: "form-label text-muted text-uppercase small fw-semibold" %>
+          <%= f.search_field :nome_cont, class: "form-control form-control-lg", placeholder: "Digite o nome do paciente" %>
         </div>
 
         <div class="col-md-3">
-          <%= f.label :cpf_cont, "CPF", class: "form-label fw-semibold text-secondary" %>
-          <%= f.search_field :cpf_cont, class: "form-control shadow-sm", placeholder: "Buscar por CPF..." %>
+          <%= f.label :cpf_cont, "CPF", class: "form-label text-muted text-uppercase small fw-semibold" %>
+          <%= f.search_field :cpf_cont, class: "form-control form-control-lg", placeholder: "Somente números" %>
         </div>
 
         <div class="col-md-3">
-          <%= f.label :email_cont, "Email", class: "form-label fw-semibold text-secondary" %>
-          <%= f.search_field :email_cont, class: "form-control shadow-sm", placeholder: "Buscar por email..." %>
+          <%= f.label :email_cont, "E-mail", class: "form-label text-muted text-uppercase small fw-semibold" %>
+          <%= f.search_field :email_cont, class: "form-control form-control-lg", placeholder: "nome@hospital.com" %>
         </div>
 
         <div class="col-md-2">
-          <%= f.label :sexo_eq, "Sexo", class: "form-label fw-semibold text-secondary" %>
+          <%= f.label :sexo_eq, "Sexo", class: "form-label text-muted text-uppercase small fw-semibold" %>
           <%= f.select :sexo_eq,
                 [["Masculino", "masculino"], ["Feminino", "feminino"], ["Indefinido", "indefinido"]],
                 { include_blank: "Todos" },
-                class: "form-select shadow-sm" %>
+                class: "form-select form-select-lg" %>
         </div>
 
         <div class="col-md-1 d-flex align-items-end">
-          <%= f.submit "Filtrar", class: "btn btn-success w-100 shadow-sm" %>
+          <div class="d-grid w-100">
+            <%= f.submit "Aplicar", class: "btn btn-primary btn-lg fw-semibold" %>
+          </div>
         </div>
+
+        <% if params[:q].present? %>
+          <div class="col-12 text-end">
+            <%= link_to pacientes_path, class: "btn btn-link text-decoration-none text-muted px-0" do %>
+              <i class="fas fa-undo me-1"></i> Limpar filtros
+            <% end %>
+          </div>
+        <% end %>
       <% end %>
     </div>
   </div>
 
   <!-- 📋 Tabela -->
   <div class="card border-0 shadow-sm">
+    <div class="card-header bg-white border-0 pb-0">
+      <span class="section-title">
+        <i class="fas fa-list-ul"></i> Registros encontrados
+      </span>
+    </div>
     <div class="table-responsive">
       <table class="table table-hover align-middle mb-0">
         <thead class="bg-primary text-white text-center">
@@ -67,7 +137,7 @@
             <% @pacientes.each do |paciente| %>
               <tr class="text-center">
                 <td class="fw-semibold text-start ps-3">
-                  <i class="fas fa-user text-primary me-1"></i>
+                  <i class="fas fa-user-md text-primary me-2"></i>
                   <%= paciente.nome %>
                 </td>
                 <td><%= paciente.cpf.presence || "-" %></td>
@@ -78,7 +148,7 @@
                       when "feminino" then "danger"
                       else "secondary"
                     end %>
-                    <span class="badge bg-<%= badge_color %> px-2 py-2"><%= paciente.sexo.capitalize %></span>
+                    <span class="badge bg-<%= badge_color %> px-3 py-2"><%= paciente.sexo.capitalize %></span>
                   <% else %>
                     -
                   <% end %>
@@ -95,23 +165,35 @@
                 <td><%= paciente.celular.presence || "-" %></td>
                 <td><%= paciente.data_nascimento&.strftime("%d/%m/%Y") || "-" %></td>
                 <td class="text-truncate" style="max-width: 180px;">
-                  <%= truncate(paciente.observacao, length: 40) if paciente.observacao.present? %>
+                  <%= paciente.observacao.present? ? truncate(paciente.observacao, length: 40) : "-" %>
                 </td>
 
                 <td class="text-end pe-3">
                   <div class="btn-group" role="group">
-                    <%= link_to paciente, class: "btn btn-sm btn-outline-primary", title: "Visualizar", data: { bs_toggle: "tooltip" } do %>
+                    <%= link_to paciente,
+                        class: "btn btn-sm btn-outline-primary d-flex align-items-center gap-1",
+                        data: { bs_toggle: "tooltip", bs_title: "Visualizar" } do %>
                       <i class="fas fa-eye"></i>
+                      <span>Visualizar</span>
                     <% end %>
 
-                    <%= link_to edit_paciente_path(paciente), class: "btn btn-sm btn-outline-success", title: "Editar", data: { bs_toggle: "tooltip" } do %>
+                    <%= link_to edit_paciente_path(paciente),
+                        class: "btn btn-sm btn-outline-success d-flex align-items-center gap-1",
+                        data: { bs_toggle: "tooltip", bs_title: "Editar" } do %>
                       <i class="fas fa-edit"></i>
+                      <span>Editar</span>
                     <% end %>
 
                     <%= link_to paciente,
-                        data: { turbo_method: :delete, turbo_confirm: "Deseja realmente excluir este paciente?" },
-                        class: "btn btn-sm btn-outline-danger", title: "Excluir", data: { bs_toggle: "tooltip" } do %>
+                        class: "btn btn-sm btn-outline-danger d-flex align-items-center gap-1",
+                        data: {
+                          turbo_method: :delete,
+                          turbo_confirm: "Deseja realmente excluir este paciente?",
+                          bs_toggle: "tooltip",
+                          bs_title: "Excluir"
+                        } do %>
                       <i class="fas fa-trash"></i>
+                      <span>Excluir</span>
                     <% end %>
                   </div>
                 </td>
@@ -121,7 +203,7 @@
             <tr>
               <td colspan="9" class="text-center py-4 text-muted">
                 <i class="fas fa-info-circle me-2"></i>
-                Nenhum paciente encontrado.
+                Nenhum paciente encontrado para os filtros aplicados.
               </td>
             </tr>
           <% end %>

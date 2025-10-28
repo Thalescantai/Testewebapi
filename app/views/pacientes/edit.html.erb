@@ -1,12 +1,32 @@
-<% content_for :title, "Editing paciente" %>
+<% content_for :title, "Editar Paciente" %>
 
-<h1>Editing paciente</h1>
+<div class="container-xl py-4">
+  <section class="page-hero mb-4">
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-8">
+        <span class="hero-badge">
+          <i class="fas fa-user-edit"></i>
+          Atualização de cadastro
+        </span>
+        <h1 class="display-6 fw-semibold mt-3 mb-2">
+          Revisar dados de <%= @paciente.nome.presence || "paciente" %>
+        </h1>
+        <p class="mb-0">
+          Confirme as informações pessoais, documentos e contatos para manter o prontuário do paciente em conformidade com os padrões da Santa Casa.
+        </p>
+      </div>
+      <div class="col-lg-4 text-lg-end">
+        <div class="d-grid gap-2">
+          <%= link_to @paciente, class: "btn btn-light btn-lg fw-semibold shadow-sm" do %>
+            <i class="fas fa-eye me-2"></i> Ver detalhes
+          <% end %>
+          <%= link_to pacientes_path, class: "btn btn-outline-light fw-semibold" do %>
+            <i class="fas fa-list me-2"></i> Voltar à listagem
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<%= render "form", paciente: @paciente %>
-
-<br>
-
-<div>
-  <%= link_to "Show this paciente", @paciente %> |
-  <%= link_to "Back to pacientes", pacientes_path %>
+  <%= render "form", paciente: @paciente %>
 </div>

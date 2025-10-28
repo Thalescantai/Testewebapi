@@ -1,11 +1,26 @@
-<% content_for :title, "New paciente" %>
+<% content_for :title, "Novo Paciente" %>
 
-<h1>New paciente</h1>
+<div class="container-xl py-4">
+  <section class="page-hero mb-4">
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-8">
+        <span class="hero-badge">
+          <i class="fas fa-hospital-user"></i>
+          Santa Casa de Ji-Paraná
+        </span>
+        <h1 class="display-6 fw-semibold mt-3 mb-2">Cadastro de novo paciente</h1>
+        <p class="mb-0">
+          Informe os dados completos para garantir prontuários atualizados e atendimento integral.
+          Campos marcados com asterisco são obrigatórios.
+        </p>
+      </div>
+      <div class="col-lg-4 text-lg-end">
+        <%= link_to pacientes_path, class: "btn btn-light btn-lg fw-semibold shadow-sm" do %>
+          <i class="fas fa-angle-left me-2"></i> Voltar para a lista
+        <% end %>
+      </div>
+    </div>
+  </section>
 
-<%= render "form", paciente: @paciente %>
-
-<br>
-
-<div>
-  <%= link_to "Back to pacientes", pacientes_path %>
+  <%= render "form", paciente: @paciente %>
 </div>

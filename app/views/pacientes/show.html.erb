@@ -1,4 +1,6 @@
-<div class="container mt-4">
+<% content_for :title, @paciente.nome.present? ? @paciente.nome : "Detalhes do Paciente" %>
+
+<div class="container-xl py-4">
   <% if notice.present? %>
     <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
       <i class="fas fa-check-circle me-2"></i>
@@ -7,68 +9,200 @@
     </div>
   <% end %>
 
-  <div class="card shadow-sm border-0">
-    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-      <h4 class="mb-0 fw-semibold">
-        <i class="fas fa-user me-2"></i> Dados do Paciente
-      </h4>
-
-      <div>
-        <%= link_to edit_paciente_path(@paciente), class: "btn btn-sm btn-light text-primary me-2" do %>
-          <i class="fas fa-edit me-1"></i> Editar
-        <% end %>
-
-        <%= link_to pacientes_path, class: "btn btn-sm btn-outline-light" do %>
-          <i class="fas fa-arrow-left me-1"></i> Voltar
-        <% end %>
+  <section class="page-hero">
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-9">
+        <span class="hero-badge">
+          <i class="fas fa-notes-medical"></i>
+          Prontuário Santa Casa
+        </span>
+        <h1 class="display-6 fw-semibold mt-3 mb-2"><%= @paciente.nome.presence || "Paciente sem nome cadastrado" %></h1>
+        <p class="mb-0">
+          Dados assistenciais consolidados para a equipe do Hospital Santa Casa de Ji-Paraná.
+          Mantenha as informações atualizadas para garantir atendimento seguro e humanizado.
+        </p>
       </div>
+      <div class="col-lg-3 text-lg-end">
+        <div class="d-grid gap-2">
+          <%= link_to edit_paciente_path(@paciente), class: "btn btn-light fw-semibold" do %>
+            <i class="fas fa-edit me-2"></i> Atualizar dados
+          <% end %>
+          <%= link_to pacientes_path, class: "btn btn-outline-light fw-semibold" do %>
+            <i class="fas fa-list me-2"></i> Voltar para lista
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-4">
+      <div class="card metrics-card h-100">
+        <div class="card-body">
+          <p class="text-uppercase text-muted small fw-semibold mb-1">Idade estimada</p>
+          <div class="metric-value">
+            <% if @paciente.data_nascimento.present? %>
+              <% idade = ((Time.zone.now - @paciente.data_nascimento.to_time) / 1.year.seconds).floor %>
+              <%= idade %> anos
+            <% else %>
+              <span class="text-muted small">Não informada</span>
+            <% end %>
+          </div>
+          <p class="mb-0 text-muted small">
+            Nascido em <%= @paciente.data_nascimento.present? ? @paciente.data_nascimento.strftime("%d/%m/%Y") : "data não cadastrada" %>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card metrics-card h-100">
+        <div class="card-body">
+          <p class="text-uppercase text-muted small fw-semibold mb-1">Contato principal</p>
+          <div class="metric-value">
+            <%= @paciente.celular.presence || content_tag(:span, "Não informado", class: "text-muted small") %>
+          </div>
+          <p class="mb-0 text-muted small">
+            <%= @paciente.email.present? ? @paciente.email : "E-mail não cadastrado" %>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card metrics-card h-100">
+        <div class="card-body">
+          <p class="text-uppercase text-muted small fw-semibold mb-1">Status do cadastro</p>
+          <div class="metric-value text-success">
+            <i class="fas fa-check-circle me-2"></i> Ativo
+          </div>
+          <p class="mb-0 text-muted small">
+            Atualizado em <%= l(Time.zone.now, format: "%d/%m/%Y") %>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm border-0">
+    <div class="card-header bg-white border-0 pb-0">
+      <span class="section-title">
+        <i class="fas fa-user"></i> Perfil completo
+      </span>
     </div>
 
     <div class="card-body">
+      <% placeholder = content_tag(:span, "Não informado", class: "text-muted") %>
+
       <!-- 🧍 Dados Pessoais -->
-      <h5 class="text-primary fw-bold mb-3">
-        <i class="fas fa-id-card me-1"></i> Dados Pessoais
-      </h5>
-      <div class="row g-3">
-        <div class="col-md-4"><strong>Nome:</strong> <%= @paciente.nome %></div>
-        <div class="col-md-4"><strong>Nome Social:</strong> <%= @paciente.nome_social %></div>
-        <div class="col-md-2"><strong>Sexo:</strong> <%= @paciente.sexo&.capitalize %></div>
-        <div class="col-md-2"><strong>Raça:</strong> <%= @paciente.raca %></div>
-        <div class="col-md-3"><strong>Data Nasc.:</strong> <%= @paciente.data_nascimento&.strftime("%d/%m/%Y") %></div>
-        <div class="col-md-3"><strong>Profissão:</strong> <%= @paciente.profissao %></div>
-        <div class="col-md-3"><strong>Escolaridade:</strong> <%= @paciente.escolaridade %></div>
-        <div class="col-md-3"><strong>Estado Civil:</strong> <%= @paciente.estado_civil %></div>
-      </div>
+      <section class="mb-4">
+        <span class="section-title mb-3">
+          <i class="fas fa-id-card"></i> Dados pessoais
+        </span>
+        <dl class="row mb-0 detail-list">
+          <dt class="col-sm-4 text-secondary small text-uppercase">Nome completo</dt>
+          <dd class="col-sm-8 mb-2"><strong><%= @paciente.nome.presence || placeholder %></strong></dd>
+
+          <dt class="col-sm-4 text-secondary small text-uppercase">Nome social</dt>
+          <dd class="col-sm-8 mb-2"><%= @paciente.nome_social.presence || placeholder %></dd>
+
+          <dt class="col-sm-4 text-secondary small text-uppercase">Sexo</dt>
+          <dd class="col-sm-8 mb-2">
+            <% if @paciente.sexo.present? %>
+              <% sexo_badge = case @paciente.sexo
+                              when "masculino" then "primary"
+                              when "feminino" then "danger"
+                              else "secondary"
+                              end %>
+              <span class="badge bg-<%= sexo_badge %> px-2 py-2"><%= @paciente.sexo.capitalize %></span>
+            <% else %>
+              <%= placeholder %>
+            <% end %>
+          </dd>
+
+          <dt class="col-sm-4 text-secondary small text-uppercase">Raça/Cor</dt>
+          <dd class="col-sm-8 mb-2"><%= @paciente.raca.presence || placeholder %></dd>
+
+          <dt class="col-sm-4 text-secondary small text-uppercase">Data de nascimento</dt>
+          <dd class="col-sm-8 mb-2">
+            <% if @paciente.data_nascimento.present? %>
+              <%= @paciente.data_nascimento.strftime("%d/%m/%Y") %>
+              <% idade = ((Time.zone.now - @paciente.data_nascimento.to_time) / 1.year.seconds).floor %>
+              <span class="text-muted">(<%= idade %> anos)</span>
+            <% else %>
+              <%= placeholder %>
+            <% end %>
+          </dd>
+
+          <dt class="col-sm-4 text-secondary small text-uppercase">Estado civil</dt>
+          <dd class="col-sm-8 mb-2"><%= @paciente.estado_civil.presence || placeholder %></dd>
+
+          <dt class="col-sm-4 text-secondary small text-uppercase">Profissão</dt>
+          <dd class="col-sm-8 mb-2"><%= @paciente.profissao.presence || placeholder %></dd>
+
+          <dt class="col-sm-4 text-secondary small text-uppercase">Escolaridade</dt>
+          <dd class="col-sm-8"><%= @paciente.escolaridade.presence || placeholder %></dd>
+        </dl>
+      </section>
 
       <!-- 📄 Documentos -->
-      <h5 class="text-primary fw-bold mb-3 mt-4">
-        <i class="fas fa-file-alt me-1"></i> Documentos
-      </h5>
-      <div class="row g-3">
-        <div class="col-md-3"><strong>CPF:</strong> <%= @paciente.cpf %></div>
-        <div class="col-md-3"><strong>RG:</strong> <%= @paciente.rg %></div>
-        <div class="col-md-3"><strong>Org. Exp.:</strong> <%= @paciente.org_exp %></div>
-        <div class="col-md-3"><strong>Cartão SUS:</strong> <%= @paciente.cartao_sus %></div>
-      </div>
+      <section class="mb-4">
+        <span class="section-title mb-3">
+          <i class="fas fa-file-alt"></i> Documentos
+        </span>
+        <dl class="row mb-0 detail-list">
+          <dt class="col-sm-4 text-secondary small text-uppercase">CPF</dt>
+          <dd class="col-sm-8 mb-2"><%= @paciente.cpf.presence || placeholder %></dd>
+
+          <dt class="col-sm-4 text-secondary small text-uppercase">RG</dt>
+          <dd class="col-sm-8 mb-2"><%= @paciente.rg.presence || placeholder %></dd>
+
+          <dt class="col-sm-4 text-secondary small text-uppercase">Orgão expedidor</dt>
+          <dd class="col-sm-8 mb-2"><%= @paciente.org_exp.presence || placeholder %></dd>
+
+          <dt class="col-sm-4 text-secondary small text-uppercase">Cartão SUS</dt>
+          <dd class="col-sm-8"><%= @paciente.cartao_sus.presence || placeholder %></dd>
+        </dl>
+      </section>
 
       <!-- 🌍 Outras Informações -->
-      <h5 class="text-primary fw-bold mb-3 mt-4">
-        <i class="fas fa-globe me-1"></i> Outras Informações
-      </h5>
-      <div class="row g-3">
-        <div class="col-md-3"><strong>Nacionalidade:</strong> <%= @paciente.nacionalidade %></div>
-        <div class="col-md-3"><strong>Naturalidade:</strong> <%= @paciente.naturalidade %></div>
-        <div class="col-md-6"><strong>Nome da Mãe:</strong> <%= @paciente.nome_mae %></div>
-        <div class="col-md-3"><strong>Celular:</strong> <%= @paciente.celular %></div>
-        <div class="col-md-4"><strong>Email:</strong> <%= @paciente.email %></div>
-        <div class="col-md-2"><strong>Horário:</strong> <%= @paciente.horario %></div>
-        <div class="col-12">
-          <strong>Observações:</strong>
-          <div class="border rounded p-2 bg-light mt-1">
-            <%= @paciente.observacao.presence || "<span class='text-muted'>Sem observações</span>".html_safe %>
-          </div>
-        </div>
-      </div>
+      <section>
+        <span class="section-title mb-3">
+          <i class="fas fa-globe"></i> Outras informações
+        </span>
+        <dl class="row mb-0 detail-list">
+          <dt class="col-sm-4 text-secondary small text-uppercase">Nacionalidade</dt>
+          <dd class="col-sm-8 mb-2"><%= @paciente.nacionalidade.presence || placeholder %></dd>
+
+          <dt class="col-sm-4 text-secondary small text-uppercase">Naturalidade</dt>
+          <dd class="col-sm-8 mb-2"><%= @paciente.naturalidade.presence || placeholder %></dd>
+
+          <dt class="col-sm-4 text-secondary small text-uppercase">Nome da mãe</dt>
+          <dd class="col-sm-8 mb-2"><%= @paciente.nome_mae.presence || placeholder %></dd>
+
+          <dt class="col-sm-4 text-secondary small text-uppercase">Celular</dt>
+          <dd class="col-sm-8 mb-2"><%= @paciente.celular.presence || placeholder %></dd>
+
+          <dt class="col-sm-4 text-secondary small text-uppercase">E-mail</dt>
+          <dd class="col-sm-8 mb-2">
+            <%= @paciente.email.present? ? mail_to(@paciente.email) : placeholder %>
+          </dd>
+
+          <dt class="col-sm-4 text-secondary small text-uppercase">Horário</dt>
+          <dd class="col-sm-8 mb-3">
+            <% if @paciente.horario.present? %>
+              <%= @paciente.horario.respond_to?(:strftime) ? @paciente.horario.strftime("%H:%M") : @paciente.horario %>
+            <% else %>
+              <%= placeholder %>
+            <% end %>
+          </dd>
+
+          <dt class="col-sm-4 text-secondary small text-uppercase">Observações</dt>
+          <dd class="col-sm-8">
+            <div class="list-box">
+              <%= @paciente.observacao.present? ? simple_format(@paciente.observacao, {}, wrapper_tag: "span") : placeholder %>
+            </div>
+          </dd>
+        </dl>
+      </section>
     </div>
 
     <div class="card-footer bg-light text-end">

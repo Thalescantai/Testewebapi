@@ -1,7 +1,15 @@
-<%= form_with(model: paciente, class: "card shadow-sm border-0") do |form| %>
-  <div class="card-header bg-primary text-white fw-semibold">
-    <i class="fas fa-user me-2"></i>
-    <%= paciente.new_record? ? "Cadastrar Paciente" : "Editar Paciente" %>
+<%= form_with(model: paciente, class: "card shadow-sm border-0 overflow-hidden", local: true) do |form| %>
+  <div class="card-header bg-primary bg-gradient text-white">
+    <div class="d-flex align-items-center justify-content-between">
+      <div>
+        <div class="text-uppercase small text-white-50 fw-semibold mb-1">Cadastro de Paciente</div>
+        <h5 class="mb-0">
+          <i class="fas fa-user me-2"></i>
+          <%= paciente.new_record? ? "Novo registro" : "Atualização cadastral" %>
+        </h5>
+      </div>
+      <i class="fas fa-heartbeat fa-2x text-white-50"></i>
+    </div>
   </div>
 
   <div class="card-body">
@@ -20,9 +28,12 @@
     <% end %>
 
     <!-- 🧍 Dados Pessoais -->
-    <h5 class="text-primary fw-bold mb-3 mt-2">
-      <i class="fas fa-id-card me-1"></i> Dados Pessoais
-    </h5>
+    <div class="mb-4">
+      <span class="section-title mb-2">
+        <i class="fas fa-id-card"></i> Dados pessoais
+      </span>
+      <p class="text-muted small mb-3">Preencha conforme documento de identificação do paciente.</p>
+    </div>
     <div class="row g-3">
       <div class="col-md-6">
         <div class="form-floating">
@@ -64,43 +75,72 @@
     </div>
 
     <!-- 📄 Documentos -->
-    <h5 class="text-primary fw-bold mb-3 mt-4">
-      <i class="fas fa-file-alt me-1"></i> Documentos
-    </h5>
+    <div class="mt-4 mb-4">
+      <span class="section-title mb-2">
+        <i class="fas fa-file-medical"></i> Documentos oficiais
+      </span>
+      <p class="text-muted small mb-3">Utilize apenas números. Informe o órgão expedidor quando disponível.</p>
+    </div>
     <div class="row g-3">
       <div class="col-md-4">
         <div class="form-floating">
-          <%= form.text_field :cpf, class: "form-control" %>
+          <%= form.text_field :cpf, class: "form-control", placeholder: "Somente números", inputmode: "numeric" %>
           <%= form.label :cpf, "CPF" %>
         </div>
       </div>
 
       <div class="col-md-4">
         <div class="form-floating">
-          <%= form.text_field :rg, class: "form-control" %>
+          <%= form.text_field :rg, class: "form-control", placeholder: "Somente números", inputmode: "numeric" %>
           <%= form.label :rg, "RG" %>
         </div>
       </div>
 
       <div class="col-md-4">
         <div class="form-floating">
-          <%= form.text_field :org_exp, class: "form-control" %>
+          <%= form.text_field :org_exp, class: "form-control", placeholder: "Órgão expedidor" %>
           <%= form.label :org_exp, "Orgão Expedidor" %>
         </div>
       </div>
 
       <div class="col-md-6">
         <div class="form-floating">
-          <%= form.text_field :cartao_sus, class: "form-control" %>
+          <%= form.text_field :cartao_sus, class: "form-control", placeholder: "Digite o cartão SUS" %>
           <%= form.label :cartao_sus, "Cartão SUS" %>
         </div>
       </div>
     </div>
 
+    <!-- ☎️ Contato -->
+    <div class="mt-4 mb-4">
+      <span class="section-title mb-2">
+        <i class="fas fa-phone"></i> Contato
+      </span>
+      <p class="text-muted small mb-3">Informe os canais utilizados para contato com a equipe da Santa Casa.</p>
+    </div>
+    <div class="row g-3">
+      <div class="col-md-4">
+        <div class="form-floating">
+          <%= form.text_field :celular, class: "form-control", placeholder: "(99) 99999-9999", inputmode: "tel" %>
+          <%= form.label :celular, "Celular" %>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="form-floating">
+          <%= form.email_field :email, class: "form-control", placeholder: "nome@email.com" %>
+          <%= form.label :email, "Email" %>
+        </div>
+      </div>
+    </div>
+
     <!-- 🌍 Outras Informações -->
-    <h5 class="text-primary fw-bold mb-3 mt-4">
-      <i class="fas fa-globe me-1"></i> Outras Informações
-    </h5>
+    <div class="mt-4 mb-4">
+      <span class="section-title mb-2">
+        <i class="fas fa-globe"></i> Outras informações
+      </span>
+      <p class="text-muted small mb-3">Campos complementares com dados sociais e familiares.</p>
+    </div>
     <div class="row g-3">
       <div class="col-md-4">
         <div class="form-floating">
@@ -144,17 +184,10 @@
         </div>
       </div>
 
-      <div class="col-md-4">
+      <div class="col-md-3">
         <div class="form-floating">
-          <%= form.text_field :celular, class: "form-control", placeholder: "(99) 99999-9999" %>
-          <%= form.label :celular, "Celular" %>
-        </div>
-      </div>
-
-      <div class="col-md-8">
-        <div class="form-floating">
-          <%= form.email_field :email, class: "form-control" %>
-          <%= form.label :email, "Email" %>
+          <%= form.time_field :horario, class: "form-control" %>
+          <%= form.label :horario, "Horário" %>
         </div>
       </div>
 
@@ -168,10 +201,10 @@
   </div>
 
   <div class="card-footer bg-light text-end">
-    <%= link_to pacientes_path, class: "btn btn-outline-secondary me-2" do %>
-      <i class="fas fa-arrow-left me-1"></i> Voltar
+    <%= link_to pacientes_path, class: "btn btn-outline-secondary btn-lg me-2" do %>
+      <i class="fas fa-times me-1"></i> Cancelar
     <% end %>
 
-    <%= form.submit "Salvar", class: "btn btn-primary px-4 fw-semibold" %>
+    <%= form.submit "Salvar paciente", class: "btn btn-primary btn-lg px-4 fw-semibold shadow-sm" %>
   </div>
 <% end %>
