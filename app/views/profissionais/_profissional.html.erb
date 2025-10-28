@@ -1,0 +1,27 @@
+<div id="<%= dom_id profissional %>">
+  <p>
+    <strong>Nome:</strong>
+    <%= profissional.nome %>
+  </p>
+
+  <p>
+    <strong>Email:</strong>
+    <%= profissional.email %>
+  </p>
+
+  <p>
+    <strong>Telefone:</strong>
+    <%= profissional.telefone %>
+  </p>
+
+  <p>
+    <strong>CPF:</strong>
+    <%= profissional.cpf %>
+  </p>
+
+  <p>
+    <strong>Cargo:</strong>
+    <%= Profissional::ROLE_LABELS[profissional.cargo] || profissional.cargo %>
+  </p>
+
+</div>

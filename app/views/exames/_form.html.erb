@@ -1,0 +1,55 @@
+<%= form_with(model: exame) do |form| %>
+  <% if exame.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(exame.errors.count, "error") %> prohibited this exame from being saved:</h2>
+
+      <ul>
+        <% exame.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :consulta_id, "Consulta", style: "display: block" %>
+    <%= form.collection_select :consulta_id, @consultas, :id, :display_label, { include_blank: "Selecione..." } %>
+    <% if @consultas.empty? %>
+      <small>Nenhuma consulta cadastrada. Registre uma consulta para vincular o exame.</small>
+    <% end %>
+  </div>
+
+  <div>
+    <%= form.label :tipo_exame, "Tipo de exame", style: "display: block" %>
+    <%= form.text_field :tipo_exame %>
+  </div>
+
+  <div>
+    <%= form.label :data_solicitacao, "Data de solicitação", style: "display: block" %>
+    <%= form.date_field :data_solicitacao %>
+  </div>
+
+  <div>
+    <%= form.label :data_marcada, style: "display: block" %>
+    <%= form.date_field :data_marcada %>
+  </div>
+
+  <div>
+    <%= form.label :data_realizada, style: "display: block" %>
+    <%= form.date_field :data_realizada %>
+  </div>
+
+  <div>
+    <%= form.label :status, style: "display: block" %>
+    <%= form.select :status, @status_options, { include_blank: "Selecione..." } %>
+  </div>
+
+  <div>
+    <%= form.label :observacoes, "Observações", style: "display: block" %>
+    <%= form.text_area :observacoes %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

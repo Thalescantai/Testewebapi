@@ -1,8 +1,9 @@
 class ConsultasController < ApplicationController
   before_action :set_consulta, only: %i[show edit update destroy]
+  before_action :set_profissional_options, only: %i[new edit create update]
 
   def index
-    @consultas = Consulta.all
+    @consultas = Consulta.includes(:medico).all
   end
 
   def show; end
@@ -55,6 +56,10 @@ class ConsultasController < ApplicationController
   end
 
   def consulta_params
-    params.require(:consulta).permit(:atendimento_id, :medico_id, :data_hora, :tipo, :anamnese, :diagnostico)
+    params.require(:consulta).permit(:medico_id, :data_hora, :tipo, :anamnese, :diagnostico)
+  end
+
+  def set_profissional_options
+    @medicos = Profissional.cargo_medico.order(:nome)
   end
 end

@@ -1,0 +1,11 @@
+<% content_for :title, "Novo exame" %>
+
+<h1>Novo exame</h1>
+
+<%= render "form", exame: @exame %>
+
+<br>
+
+<div>
+  <%= link_to "Voltar para exames", exames_path %>
+</div>

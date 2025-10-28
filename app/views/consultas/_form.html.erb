@@ -12,13 +12,11 @@
   <% end %>
 
   <div>
-    <%= form.label :atendimento_id, style: "display: block" %>
-    <%= form.text_field :atendimento_id %>
-  </div>
-
-  <div>
-    <%= form.label :medico_id, style: "display: block" %>
-    <%= form.text_field :medico_id %>
+    <%= form.label :medico_id, "Médico responsável", style: "display: block" %>
+    <%= form.collection_select :medico_id, @medicos, :id, :nome, { include_blank: "Selecione..." }, { class: "select-medico" } %>
+    <% if @medicos.empty? %>
+      <small>Cadastre um profissional com cargo "Médico" para habilitar esta seleção.</small>
+    <% end %>
   </div>
 
   <div>

@@ -1,12 +1,7 @@
 <div id="<%= dom_id consulta %>">
   <p>
-    <strong>Atendimento:</strong>
-    <%= consulta.atendimento_id %>
-  </p>
-
-  <p>
-    <strong>Medico:</strong>
-    <%= consulta.medico_id %>
+    <strong>Médico:</strong>
+    <%= consulta.medico&.nome || "-" %>
   </p>
 
   <p>

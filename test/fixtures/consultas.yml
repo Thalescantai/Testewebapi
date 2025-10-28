@@ -1,0 +1,13 @@
+one:
+  medico: one
+  data_hora: 2025-10-29 10:00:00
+  tipo: Retorno
+  anamnese: Paciente relata melhora parcial.
+  diagnostico: Em acompanhamento.
+
+two:
+  medico: one
+  data_hora: 2025-10-30 09:00:00
+  tipo: Avaliação inicial
+  anamnese: Paciente encaminhado pela recepção.
+  diagnostico: Avaliação em andamento.

@@ -1,0 +1,37 @@
+<div id="<%= dom_id exame %>">
+  <p>
+    <strong>Consulta:</strong>
+    <%= exame.consulta&.display_label || "-" %>
+  </p>
+
+  <p>
+    <strong>Tipo de exame:</strong>
+    <%= exame.tipo_exame %>
+  </p>
+
+  <p>
+    <strong>Data de solicitação:</strong>
+    <%= exame.data_solicitacao %>
+  </p>
+
+  <p>
+    <strong>Data marcada:</strong>
+    <%= exame.data_marcada %>
+  </p>
+
+  <p>
+    <strong>Data realizada:</strong>
+    <%= exame.data_realizada %>
+  </p>
+
+  <p>
+    <strong>Status:</strong>
+    <%= Exame::STATUS_LABELS[exame.status] %>
+  </p>
+
+  <p>
+    <strong>Observações:</strong>
+    <%= exame.observacoes %>
+  </p>
+
+</div>

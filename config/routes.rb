@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  resources :atendimentos
+  resources :profissionais
+  resources :exames
   resources :consultas
   get "endereco/index"
   get "endereco/show"

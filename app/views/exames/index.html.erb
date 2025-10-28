@@ -1,0 +1,20 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Exames" %>
+
+<h1>Exames</h1>
+
+<div id="exames">
+  <% if @exames.any? %>
+    <% @exames.each do |exame| %>
+      <%= render exame %>
+      <p>
+        <%= link_to "Ver exame", exame %>
+      </p>
+    <% end %>
+  <% else %>
+    <p>Nenhum exame cadastrado.</p>
+  <% end %>
+</div>
+
+<%= link_to "Novo exame", new_exame_path %>

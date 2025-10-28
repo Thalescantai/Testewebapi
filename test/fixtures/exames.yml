@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  consulta: one
+  tipo_exame: Topografia
+  data_solicitacao: 2025-10-28
+  data_marcada: 2025-11-02
+  data_realizada: 
+  status: pendente
+  observacoes: Exame solicitado para acompanhamento.
+
+two:
+  consulta: two
+  tipo_exame: Campimetria
+  data_solicitacao: 2025-10-25
+  data_marcada: 2025-10-30
+  data_realizada: 2025-10-30
+  status: realizado
+  observacoes: Resultado anexado ao prontuário.

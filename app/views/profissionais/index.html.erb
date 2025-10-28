@@ -1,0 +1,20 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Profissionais" %>
+
+<h1>Profissionais</h1>
+
+<div id="profissionais">
+  <% if @profissionais.any? %>
+    <% @profissionais.each do |profissional| %>
+      <%= render profissional %>
+      <p>
+        <%= link_to "Ver profissional", profissional %>
+      </p>
+    <% end %>
+  <% else %>
+    <p>Nenhum profissional cadastrado.</p>
+  <% end %>
+</div>
+
+<%= link_to "Novo profissional", new_profissional_path %>
