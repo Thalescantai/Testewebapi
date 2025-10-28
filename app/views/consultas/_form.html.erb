@@ -1,0 +1,47 @@
+<%= form_with(model: consulta) do |form| %>
+  <% if consulta.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(consulta.errors.count, "error") %> prohibited this consulta from being saved:</h2>
+
+      <ul>
+        <% consulta.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :atendimento_id, style: "display: block" %>
+    <%= form.text_field :atendimento_id %>
+  </div>
+
+  <div>
+    <%= form.label :medico_id, style: "display: block" %>
+    <%= form.text_field :medico_id %>
+  </div>
+
+  <div>
+    <%= form.label :data_hora, style: "display: block" %>
+    <%= form.datetime_field :data_hora %>
+  </div>
+
+  <div>
+    <%= form.label :tipo, style: "display: block" %>
+    <%= form.text_field :tipo %>
+  </div>
+
+  <div>
+    <%= form.label :anamnese, style: "display: block" %>
+    <%= form.text_area :anamnese %>
+  </div>
+
+  <div>
+    <%= form.label :diagnostico, style: "display: block" %>
+    <%= form.text_area :diagnostico %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

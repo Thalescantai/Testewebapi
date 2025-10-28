@@ -10,7 +10,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_10_24_185541) do
+ActiveRecord::Schema[7.2].define(version: 2025_10_29_160000) do
+  create_table "atendimentos", force: :cascade do |t|
+    t.integer "paciente_id", null: false
+    t.string "tipo_paciente"
+    t.date "data_entrada"
+    t.string "encaminhamento"
+    t.string "status"
+    t.text "observacoes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["paciente_id"], name: "index_atendimentos_on_paciente_id"
+  end
+
+  create_table "consultas", force: :cascade do |t|
+    t.integer "atendimento_id", null: false
+    t.integer "medico_id"
+    t.datetime "data_hora"
+    t.string "tipo"
+    t.text "anamnese"
+    t.text "diagnostico"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["atendimento_id"], name: "index_consultas_on_atendimento_id"
+  end
+
   create_table "enderecos", force: :cascade do |t|
     t.string "rua"
     t.string "numero"
@@ -49,5 +73,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_24_185541) do
     t.string "nome_mae"
   end
 
+  add_foreign_key "atendimentos", "pacientes"
+  add_foreign_key "consultas", "atendimentos"
   add_foreign_key "enderecos", "pacientes"
 end

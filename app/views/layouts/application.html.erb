@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Testewebapi" %></title>
+    <title><%= content_for(:title) || "Modulo S.U.S" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
@@ -31,6 +31,8 @@
       <nav class="menu" data-menu-target="panel" aria-hidden="true">
         <ul>
           <li><%= link_to "Pacientes", pacientes_path %></li>
+          <li><%= link_to "Atendimentos", atendimentos_path %></li>
+          <li><%= link_to "Consultas", consultas_path %></li>
           <li><%= link_to "Endereços", endereco_index_path %></li>
         </ul>
       </nav>
