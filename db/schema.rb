@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_10_29_163004) do
+ActiveRecord::Schema[7.2].define(version: 2025_10_29_163005) do
   create_table "consultas", force: :cascade do |t|
     t.integer "medico_id"
     t.datetime "data_hora"
@@ -81,6 +81,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_29_163004) do
     t.string "cargo", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "crm"
     t.index ["cpf"], name: "index_profissionais_on_cpf", unique: true
     t.index ["email"], name: "index_profissionais_on_email", unique: true
   end

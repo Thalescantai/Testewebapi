@@ -1,42 +1,105 @@
-<%= form_with(model: profissional) do |form| %>
-  <% if profissional.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(profissional.errors.count, "error") %> prohibited this profissional from being saved:</h2>
-
-      <ul>
-        <% profissional.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+<%= form_with(model: profissional,
+              local: true,
+              data: { controller: "profissional-form" },
+              html: { style: "display: block; border: 1px solid #e4e7ef; border-radius: 12px; background: #fff; box-shadow: 0 2px 6px rgba(15,23,42,0.05); overflow: hidden;" }) do |form| %>
+  <div style="padding: 1.25rem 1.5rem; background: #f4f6fb; border-bottom: 1px solid #e4e7ef; display: flex; justify-content: space-between; align-items: center;">
+    <div>
+      <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; color: #636a7a;">
+        Cadastro de profissional
+      </div>
+      <div style="font-size: 1.2rem; font-weight: 600; color: #1f2937; margin-top: 0.3rem;">
+        <%= profissional.new_record? ? "Novo registro" : "Atualização de dados" %>
+      </div>
     </div>
-  <% end %>
-
-  <div>
-    <%= form.label :nome, style: "display: block" %>
-    <%= form.text_field :nome %>
+    <i class="fas fa-user-md" style="font-size: 2rem; color: #2563eb;"></i>
   </div>
 
-  <div>
-    <%= form.label :email, style: "display: block" %>
-    <%= form.email_field :email %>
+  <div style="padding: 1.5rem;">
+    <% if profissional.errors.any? %>
+      <div style="border: 1px solid #fecaca; background: #fef2f2; color: #991b1b; border-radius: 8px; padding: 0.9rem 1rem; margin-bottom: 1.25rem;">
+        <div style="font-weight: 600; margin-bottom: 0.5rem;">
+          <i class="fas fa-exclamation-circle"></i>
+          <%= pluralize(profissional.errors.count, "erro impede", plural: "erros impedem") %> o salvamento:
+        </div>
+        <ul style="margin: 0; padding-left: 1.1rem;">
+          <% profissional.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div style="margin-bottom: 1.5rem;">
+      <span style="font-weight: 600; color: #1f2937; letter-spacing: 0.06em; text-transform: uppercase; font-size: 0.8rem;">
+        Dados principais
+      </span>
+      <p style="margin: 0.35rem 0 0; font-size: 0.85rem; color: #6b7280;">
+        Informações essenciais para identificação e contato do profissional.
+      </p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
+      <div style="min-width: 0;">
+        <%= form.label :nome, "Nome completo", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.text_field :nome, style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
+      </div>
+
+      <div style="min-width: 0;">
+        <%= form.label :email, "E-mail", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.email_field :email, style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
+      </div>
+
+      <div style="min-width: 0;">
+        <%= form.label :telefone, "Telefone", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.telephone_field :telefone,
+                                 placeholder: "(99) 99999-9999",
+                                 inputmode: "tel",
+                                 style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;",
+                                 data: { controller: "phone-mask", action: "input->phone-mask#format blur->phone-mask#format" } %>
+      </div>
+
+      <div style="min-width: 0;">
+        <%= form.label :cpf, "CPF", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.text_field :cpf,
+                            placeholder: "000.000.000-00",
+                            inputmode: "numeric",
+                            maxlength: 14,
+                            style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;",
+                            data: { controller: "cpf-mask", action: "input->cpf-mask#format blur->cpf-mask#format" } %>
+      </div>
+    </div>
+
+    <div style="margin: 2rem 0 1.5rem;">
+      <span style="font-weight: 600; color: #1f2937; letter-spacing: 0.06em; text-transform: uppercase; font-size: 0.8rem;">
+        Informações profissionais
+      </span>
+      <p style="margin: 0.35rem 0 0; font-size: 0.85rem; color: #6b7280;">
+        Defina o cargo para habilitar acessos corretos e informe o CRM quando necessário.
+      </p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
+      <div style="min-width: 0;">
+        <%= form.label :cargo, "Cargo", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.select :cargo,
+                        Profissional.role_options_for_select,
+                        { include_blank: "Selecione..." },
+                        data: { profissional_form_target: "cargoSelect", action: "change->profissional-form#toggle" },
+                        style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937; background: #fff;" %>
+      </div>
+
+      <div data-profissional-form-target="crmField"
+           style="min-width: 0; <%= profissional.cargo_medico? ? '' : 'display: none;' %>">
+        <%= form.label :crm, "CRM", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.text_field :crm, style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
+      </div>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :telefone, style: "display: block" %>
-    <%= form.telephone_field :telefone %>
-  </div>
-
-  <div>
-    <%= form.label :cpf, style: "display: block" %>
-    <%= form.text_field :cpf, maxlength: 11 %>
-  </div>
-
-  <div>
-    <%= form.label :cargo, style: "display: block" %>
-    <%= form.select :cargo, Profissional.role_options_for_select, { include_blank: "Selecione..." } %>
-  </div>
-
-  <div>
-    <%= form.submit %>
+  <div style="padding: 1.1rem 1.5rem; border-top: 1px solid #e4e7ef; background: #f9fafc; text-align: right;">
+    <%= link_to profissionais_path, style: "margin-right: 0.75rem; padding: 0.65rem 1.2rem; border: 1px solid #e4e7ef; border-radius: 8px; font-weight: 600; color: #4b5563; text-decoration: none;" do %>
+      Cancelar
+    <% end %>
+    <%= form.submit "Salvar profissional", style: "padding: 0.7rem 1.4rem; background: #2563eb; color: #fff; border: none; border-radius: 8px; font-weight: 600; letter-spacing: 0.03em; cursor: pointer; box-shadow: 0 2px 4px rgba(37,99,235,0.35);" %>
   </div>
 <% end %>

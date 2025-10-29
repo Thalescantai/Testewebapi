@@ -24,4 +24,11 @@
     <%= Profissional::ROLE_LABELS[profissional.cargo] || profissional.cargo %>
   </p>
 
+  <% if profissional.cargo_medico? && profissional.crm.present? %>
+    <p>
+      <strong>CRM:</strong>
+      <%= profissional.crm %>
+    </p>
+  <% end %>
+
 </div>

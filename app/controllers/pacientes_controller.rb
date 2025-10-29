@@ -3,8 +3,10 @@ class PacientesController < ApplicationController
 
   # GET /pacientes or /pacientes.json
   def index
+    sanitize_cpf_filter
     @q = Paciente.ransack(params[:q])
     @pacientes = @q.result.order(created_at: :desc).page(params[:page]).per(10)
+    @consultas_hoje_count = Consulta.where(data_hora: Time.zone.today.all_day).count
   end
 
 
@@ -88,5 +90,14 @@ class PacientesController < ApplicationController
       :naturalidade,
       :nome_mae
     )
+  end
+
+  def sanitize_cpf_filter
+    return unless params[:q].is_a?(ActionController::Parameters) || params[:q].is_a?(Hash)
+
+    cpf_filter = params[:q][:cpf_cont]
+    return if cpf_filter.blank?
+
+    params[:q][:cpf_cont] = cpf_filter.gsub(/\D/, "")
   end
 end

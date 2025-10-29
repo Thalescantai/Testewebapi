@@ -1,11 +1,27 @@
 <% content_for :title, "Novo profissional" %>
 
-<h1>Novo profissional</h1>
+<div class="container-xl py-4">
+  <section style="margin-bottom: 2rem;">
+    <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: center; justify-content: space-between;">
+      <div style="flex: 1 1 340px;">
+        <span style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0.75rem; border-radius: 999px; background: #e3edff; color: #2563eb; font-weight: 600; font-size: 0.85rem;">
+          <i class="fas fa-user-md"></i>
+          Equipe Assistencial
+        </span>
+        <h1 style="margin: 1rem 0 0.5rem; font-size: 2rem; font-weight: 600; color: #1f2937;">Cadastro de novo profissional</h1>
+        <p style="margin: 0; color: #6b7280; font-size: 0.95rem;">
+          Registre colaboradores da Santa Casa com informações completas para organizar agendas e acessos.
+        </p>
+      </div>
+      <div style="flex: 0 0 auto;">
+        <%= link_to profissionais_path,
+            style: "display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.1rem; border: 1px solid #e4e7ef; border-radius: 10px; font-weight: 600; color: #4b5563; text-decoration: none; background: #fff; box-shadow: 0 1px 3px rgba(15,23,42,0.08);" do %>
+          <i class="fas fa-angle-left"></i>
+          Voltar para a lista
+        <% end %>
+      </div>
+    </div>
+  </section>
 
-<%= render "form", profissional: @profissional %>
-
-<br>
-
-<div>
-  <%= link_to "Voltar para profissionais", profissionais_path %>
+  <%= render "form", profissional: @profissional %>
 </div>

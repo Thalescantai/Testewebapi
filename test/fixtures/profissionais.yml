@@ -3,13 +3,14 @@
 one:
   nome: Dr. Julio Teste
   email: julio@example.com
-  telefone: (11) 99999-1111
+  telefone: "(11) 99999-1111"
   cpf: 12345678900
+  crm: 12345
   cargo: medico
 
 two:
   nome: Maria Recepcao
   email: maria@example.com
-  telefone: (11) 98888-2222
+  telefone: "(11) 98888-2222"
   cpf: 98765432100
   cargo: recepcionista

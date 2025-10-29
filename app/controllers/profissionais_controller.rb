@@ -55,6 +55,6 @@ class ProfissionaisController < ApplicationController
   end
 
   def profissional_params
-    params.require(:profissional).permit(:nome, :email, :telefone, :cpf, :cargo)
+    params.require(:profissional).permit(:nome, :email, :telefone, :cpf, :cargo, :crm)
   end
 end

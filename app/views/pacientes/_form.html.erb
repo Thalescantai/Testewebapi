@@ -1,25 +1,26 @@
-<%= form_with(model: paciente, class: "card shadow-sm border-0 overflow-hidden", local: true) do |form| %>
-  <div class="card-header bg-primary bg-gradient text-white">
-    <div class="d-flex align-items-center justify-content-between">
-      <div>
-        <div class="text-uppercase small text-white-50 fw-semibold mb-1">Cadastro de Paciente</div>
-        <h5 class="mb-0">
-          <i class="fas fa-user me-2"></i>
-          <%= paciente.new_record? ? "Novo registro" : "Atualização cadastral" %>
-        </h5>
+<%= form_with(model: paciente,
+              local: true,
+              html: { style: "display: block; border: 1px solid #e4e7ef; border-radius: 12px; background: #fff; box-shadow: 0 2px 6px rgba(15,23,42,0.05); overflow: hidden;" }) do |form| %>
+  <div style="padding: 1.25rem 1.5rem; background: #f4f6fb; border-bottom: 1px solid #e4e7ef; display: flex; justify-content: space-between; align-items: center;">
+    <div>
+      <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; color: #636a7a;">
+        Cadastro de paciente
       </div>
-      <i class="fas fa-heartbeat fa-2x text-white-50"></i>
+      <div style="font-size: 1.2rem; font-weight: 600; color: #1f2937; margin-top: 0.3rem;">
+        <%= paciente.new_record? ? "Novo registro assistencial" : "Atualização cadastral" %>
+      </div>
     </div>
+    <i class="fas fa-heartbeat" style="font-size: 2rem; color: #10b981;"></i>
   </div>
 
-  <div class="card-body">
+  <div style="padding: 1.5rem;">
     <% if paciente.errors.any? %>
-      <div class="alert alert-danger">
-        <h6 class="fw-bold mb-2">
-          <i class="fas fa-exclamation-triangle me-1"></i>
-          Erros encontrados:
-        </h6>
-        <ul class="mb-0">
+      <div style="border: 1px solid #fecaca; background: #fef2f2; color: #991b1b; border-radius: 8px; padding: 0.9rem 1rem; margin-bottom: 1.25rem;">
+        <div style="font-weight: 600; margin-bottom: 0.5rem;">
+          <i class="fas fa-exclamation-triangle"></i>
+          <%= pluralize(paciente.errors.count, "erro impede", plural: "erros impedem") %> o salvamento:
+        </div>
+        <ul style="margin: 0; padding-left: 1.1rem;">
           <% paciente.errors.full_messages.each do |message| %>
             <li><%= message %></li>
           <% end %>
@@ -27,184 +28,162 @@
       </div>
     <% end %>
 
-    <!-- 🧍 Dados Pessoais -->
-    <div class="mb-4">
-      <span class="section-title mb-2">
-        <i class="fas fa-id-card"></i> Dados pessoais
+    <div style="margin-bottom: 1.5rem;">
+      <span style="font-weight: 600; color: #1f2937; letter-spacing: 0.06em; text-transform: uppercase; font-size: 0.8rem;">
+        Dados pessoais
       </span>
-      <p class="text-muted small mb-3">Preencha conforme documento de identificação do paciente.</p>
+      <p style="margin: 0.35rem 0 0; font-size: 0.85rem; color: #6b7280;">
+        Registre informações conforme documento de identificação e dados sociais do paciente.
+      </p>
     </div>
-    <div class="row g-3">
-      <div class="col-md-6">
-        <div class="form-floating">
-          <%= form.text_field :nome, class: "form-control", placeholder: "Nome completo" %>
-          <%= form.label :nome, "Nome completo" %>
-        </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
+      <div style="min-width: 0;">
+        <%= form.label :nome, "Nome completo", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.text_field :nome, placeholder: "Nome completo", style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
       </div>
 
-      <div class="col-md-6">
-        <div class="form-floating">
-          <%= form.text_field :nome_social, class: "form-control", placeholder: "Nome social" %>
-          <%= form.label :nome_social, "Nome social (opcional)" %>
-        </div>
+      <div style="min-width: 0;">
+        <%= form.label :nome_social, "Nome social (opcional)", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.text_field :nome_social, placeholder: "Como o paciente prefere ser chamado", style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
       </div>
 
-      <div class="col-md-4">
-        <div class="form-floating">
-          <%= form.date_field :data_nascimento, class: "form-control" %>
-          <%= form.label :data_nascimento, "Data de Nascimento" %>
-        </div>
+      <div style="min-width: 0;">
+        <%= form.label :data_nascimento, "Data de nascimento", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.date_field :data_nascimento, style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.7rem 0.9rem; font-size: 0.95rem; color: #1f2937; background: #fff;" %>
       </div>
 
-      <div class="col-md-4">
-        <div class="form-floating">
-          <%= form.select :sexo,
-                [["Masculino", "masculino"], ["Feminino", "feminino"], ["Indefinido", "indefinido"]],
-                { include_blank: "Selecione..." },
-                class: "form-select" %>
-          <%= form.label :sexo, "Sexo" %>
-        </div>
+      <div style="min-width: 0;">
+        <%= form.label :sexo, "Sexo", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.select :sexo,
+                        [["Masculino", "masculino"], ["Feminino", "feminino"], ["Indefinido", "indefinido"]],
+                        { include_blank: "Selecione..." },
+                        { style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.7rem 0.9rem; font-size: 0.95rem; color: #1f2937; background: #fff;" } %>
       </div>
 
-      <div class="col-md-4">
-        <div class="form-floating">
-          <%= form.text_field :raca, class: "form-control", placeholder: "Raça/Cor" %>
-          <%= form.label :raca, "Raça/Cor" %>
-        </div>
+      <div style="min-width: 0;">
+        <%= form.label :raca, "Raça/Cor", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.text_field :raca, placeholder: "Auto declaração", style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
       </div>
     </div>
 
-    <!-- 📄 Documentos -->
-    <div class="mt-4 mb-4">
-      <span class="section-title mb-2">
-        <i class="fas fa-file-medical"></i> Documentos oficiais
+    <div style="margin: 2rem 0 1.5rem;">
+      <span style="font-weight: 600; color: #1f2937; letter-spacing: 0.06em; text-transform: uppercase; font-size: 0.8rem;">
+        Documentos oficiais
       </span>
-      <p class="text-muted small mb-3">Utilize apenas números. Informe o órgão expedidor quando disponível.</p>
-    </div>
-    <div class="row g-3">
-      <div class="col-md-4">
-        <div class="form-floating">
-          <%= form.text_field :cpf, class: "form-control", placeholder: "Somente números", inputmode: "numeric" %>
-          <%= form.label :cpf, "CPF" %>
-        </div>
-      </div>
-
-      <div class="col-md-4">
-        <div class="form-floating">
-          <%= form.text_field :rg, class: "form-control", placeholder: "Somente números", inputmode: "numeric" %>
-          <%= form.label :rg, "RG" %>
-        </div>
-      </div>
-
-      <div class="col-md-4">
-        <div class="form-floating">
-          <%= form.text_field :org_exp, class: "form-control", placeholder: "Órgão expedidor" %>
-          <%= form.label :org_exp, "Orgão Expedidor" %>
-        </div>
-      </div>
-
-      <div class="col-md-6">
-        <div class="form-floating">
-          <%= form.text_field :cartao_sus, class: "form-control", placeholder: "Digite o cartão SUS" %>
-          <%= form.label :cartao_sus, "Cartão SUS" %>
-        </div>
-      </div>
+      <p style="margin: 0.35rem 0 0; font-size: 0.85rem; color: #6b7280;">
+        Utilize apenas números e informe o órgão expedidor sempre que disponível.
+      </p>
     </div>
 
-    <!-- ☎️ Contato -->
-    <div class="mt-4 mb-4">
-      <span class="section-title mb-2">
-        <i class="fas fa-phone"></i> Contato
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
+      <div style="min-width: 0;">
+        <%= form.label :cpf, "CPF", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.text_field :cpf,
+                            placeholder: "000.000.000-00",
+                            inputmode: "numeric",
+                            maxlength: 14,
+                            style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;",
+                            data: { controller: "cpf-mask", action: "input->cpf-mask#format blur->cpf-mask#format" } %>
+      </div>
+
+      <div style="min-width: 0;">
+        <%= form.label :rg, "RG", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.text_field :rg, placeholder: "Somente números", inputmode: "numeric", style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
+      </div>
+
+      <div style="min-width: 0;">
+        <%= form.label :org_exp, "Órgão expedidor", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.text_field :org_exp, placeholder: "UF/Órgão", style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
+      </div>
+
+      <div style="min-width: 0;">
+        <%= form.label :cartao_sus, "Cartão SUS", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.text_field :cartao_sus, placeholder: "Número do cartão SUS", style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
+      </div>
+    </div>
+
+    <div style="margin: 2rem 0 1.5rem%;">
+      <span style="font-weight: 600; color: #1f2937; letter-spacing: 0.06em; text-transform: uppercase; font-size: 0.8rem;">
+        Contato
       </span>
-      <p class="text-muted small mb-3">Informe os canais utilizados para contato com a equipe da Santa Casa.</p>
-    </div>
-    <div class="row g-3">
-      <div class="col-md-4">
-        <div class="form-floating">
-          <%= form.text_field :celular, class: "form-control", placeholder: "(99) 99999-9999", inputmode: "tel" %>
-          <%= form.label :celular, "Celular" %>
-        </div>
-      </div>
-
-      <div class="col-md-8">
-        <div class="form-floating">
-          <%= form.email_field :email, class: "form-control", placeholder: "nome@email.com" %>
-          <%= form.label :email, "Email" %>
-        </div>
-      </div>
+      <p style="margin: 0.35rem 0 0; font-size: 0.85rem; color: #6b7280;">
+        Informe canais utilizados pela equipe para acompanhar o paciente.
+      </p>
     </div>
 
-    <!-- 🌍 Outras Informações -->
-    <div class="mt-4 mb-4">
-      <span class="section-title mb-2">
-        <i class="fas fa-globe"></i> Outras informações
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
+      <div style="min-width: 0;">
+        <%= form.label :celular, "Celular", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.text_field :celular,
+                            placeholder: "(99) 99999-9999",
+                            inputmode: "tel",
+                            style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;",
+                            data: { controller: "phone-mask", action: "input->phone-mask#format blur->phone-mask#format" } %>
+      </div>
+
+      <div style="min-width: 0;">
+        <%= form.label :email, "Email", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.email_field :email, placeholder: "nome@hospital.com", style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
+      </div>
+    </div>
+
+    <div style="margin: 2rem 0 1.5rem;">
+      <span style="font-weight: 600; color: #1f2937; letter-spacing: 0.06em; text-transform: uppercase; font-size: 0.8rem;">
+        Outras informações
       </span>
-      <p class="text-muted small mb-3">Campos complementares com dados sociais e familiares.</p>
+      <p style="margin: 0.35rem 0 0; font-size: 0.85rem; color: #6b7280;">
+        Dados complementares de contexto sociofamiliar e acompanhamento.
+      </p>
     </div>
-    <div class="row g-3">
-      <div class="col-md-4">
-        <div class="form-floating">
-          <%= form.text_field :profissao, class: "form-control" %>
-          <%= form.label :profissao, "Profissão" %>
-        </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
+      <div style="min-width: 0;">
+        <%= form.label :profissao, "Profissão", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.text_field :profissao, style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
       </div>
 
-      <div class="col-md-4">
-        <div class="form-floating">
-          <%= form.text_field :escolaridade, class: "form-control" %>
-          <%= form.label :escolaridade, "Escolaridade" %>
-        </div>
+      <div style="min-width: 0;">
+        <%= form.label :escolaridade, "Escolaridade", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.text_field :escolaridade, style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
       </div>
 
-      <div class="col-md-4">
-        <div class="form-floating">
-          <%= form.text_field :estado_civil, class: "form-control" %>
-          <%= form.label :estado_civil, "Estado Civil" %>
-        </div>
+      <div style="min-width: 0;">
+        <%= form.label :estado_civil, "Estado civil", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.text_field :estado_civil, style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
       </div>
 
-      <div class="col-md-4">
-        <div class="form-floating">
-          <%= form.text_field :nacionalidade, class: "form-control" %>
-          <%= form.label :nacionalidade, "Nacionalidade" %>
-        </div>
+      <div style="min-width: 0;">
+        <%= form.label :nacionalidade, "Nacionalidade", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.text_field :nacionalidade, style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
       </div>
 
-      <div class="col-md-4">
-        <div class="form-floating">
-          <%= form.text_field :naturalidade, class: "form-control" %>
-          <%= form.label :naturalidade, "Naturalidade" %>
-        </div>
+      <div style="min-width: 0;">
+        <%= form.label :naturalidade, "Naturalidade", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.text_field :naturalidade, style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
       </div>
 
-      <div class="col-md-4">
-        <div class="form-floating">
-          <%= form.text_field :nome_mae, class: "form-control" %>
-          <%= form.label :nome_mae, "Nome da Mãe" %>
-        </div>
+      <div style="min-width: 0;">
+        <%= form.label :nome_mae, "Nome da mãe", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.text_field :nome_mae, style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
       </div>
 
-      <div class="col-md-3">
-        <div class="form-floating">
-          <%= form.time_field :horario, class: "form-control" %>
-          <%= form.label :horario, "Horário" %>
-        </div>
+      <div style="min-width: 0;">
+        <%= form.label :horario, "Horário", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.time_field :horario, style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.7rem 0.9rem; font-size: 0.95rem; color: #1f2937; background: #fff;" %>
       </div>
 
-      <div class="col-12">
-        <div class="form-floating">
-          <%= form.text_area :observacao, class: "form-control", style: "height: 100px;", placeholder: "Observações..." %>
-          <%= form.label :observacao, "Observações" %>
-        </div>
+      <div style="min-width: 0; grid-column: 1 / -1;">
+        <%= form.label :observacao, "Observações", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.text_area :observacao, placeholder: "Registre informações clínicas, sociais ou recomendações importantes.", style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.9rem; font-size: 0.95rem; color: #1f2937; min-height: 110px;" %>
       </div>
     </div>
   </div>
 
-  <div class="card-footer bg-light text-end">
-    <%= link_to pacientes_path, class: "btn btn-outline-secondary btn-lg me-2" do %>
-      <i class="fas fa-times me-1"></i> Cancelar
+  <div style="padding: 1.1rem 1.5rem; border-top: 1px solid #e4e7ef; background: #f9fafc; text-align: right;">
+    <%= link_to pacientes_path, style: "margin-right: 0.75rem; padding: 0.65rem 1.2rem; border: 1px solid #e4e7ef; border-radius: 8px; font-weight: 600; color: #4b5563; text-decoration: none;" do %>
+      Cancelar
     <% end %>
-
-    <%= form.submit "Salvar paciente", class: "btn btn-primary btn-lg px-4 fw-semibold shadow-sm" %>
+    <%= form.submit paciente.new_record? ? "Salvar paciente" : "Atualizar paciente", style: "padding: 0.7rem 1.4rem; background: #2563eb; color: #fff; border: none; border-radius: 8px; font-weight: 600; letter-spacing: 0.03em; cursor: pointer; box-shadow: 0 2px 4px rgba(37,99,235,0.35);" %>
   </div>
 <% end %>

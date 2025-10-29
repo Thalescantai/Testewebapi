@@ -28,83 +28,83 @@
     <div class="col-md-4">
       <div class="card metrics-card h-100">
         <div class="card-body">
-          <p class="text-uppercase text-muted small fw-semibold mb-1">Pacientes cadastrados</p>
-          <div class="metric-value"><%= total_registros %></div>
-          <p class="mb-0 text-muted small">Base completa do hospital</p>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card metrics-card h-100">
-        <div class="card-body">
-          <p class="text-uppercase text-muted small fw-semibold mb-1">Resultado atual</p>
-          <div class="metric-value"><%= @pacientes.size %></div>
-          <% if params[:q].present? %>
-            <p class="mb-0 text-muted small">Filtros ativos para a busca</p>
-          <% else %>
-            <p class="mb-0 text-muted small">Listando os registros mais recentes</p>
-          <% end %>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card metrics-card h-100">
-        <div class="card-body">
-          <p class="text-uppercase text-muted small fw-semibold mb-1">Última atualização</p>
-          <div class="metric-value">
-            <%= l(Time.zone.now, format: "%d/%m/%Y") %>
+          <% consultas_hoje = @consultas_hoje_count.to_i %>
+          <p class="text-uppercase text-muted small fw-semibold mb-1">Consultas de hoje</p>
+          <div class="metric-value d-flex align-items-baseline gap-2">
+            <span><%= consultas_hoje %></span>
+            <span class="fs-6 text-muted">
+              paciente<%= "s" unless consultas_hoje == 1 %>
+            </span>
           </div>
-          <p class="mb-0 text-muted small">Sincronizado com o prontuário digital</p>
+          <p class="mb-0 text-muted small">
+            <%= consultas_hoje.positive? ? "Agendados para atendimento" : "Nenhuma consulta agendada hoje" %>
+          </p>
         </div>
       </div>
+    </div>
+    <div class="col-md-4">
+      
     </div>
   </div>
 
   <!-- 🔍 Filtros de Busca -->
-  <div class="card shadow-sm border-0 mb-4">
-    <div class="card-header bg-white border-0 pb-0">
-      <span class="section-title">
-        <i class="fas fa-search"></i> Filtro inteligente
+  <div style="margin-bottom: 1.5rem; border: 1px solid #e4e7ef; border-radius: 12px; background: #fff; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.05);">
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.35rem; background: #f4f6fb; border-bottom: 1px solid #e4e7ef; border-top-left-radius: 12px; border-top-right-radius: 12px;">
+      <span style="font-weight: 600; color: #1f2937; letter-spacing: 0.06em; text-transform: uppercase; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 0.5rem;">
+        <i class="fas fa-search" style="color: #2563eb;"></i>
+        Filtros de busca
       </span>
+      <% if params[:q].present? %>
+        <span style="font-size: 0.85rem; color: #2563eb; font-weight: 600;">
+          <%= pluralize(total_registros, "resultado", plural: "resultados") %>
+        </span>
+      <% else %>
+        <span style="font-size: 0.85rem; color: #6b7280;">Mostrando registros recentes</span>
+      <% end %>
     </div>
-    <div class="card-body pt-3">
-      <%= search_form_for @q, url: pacientes_path, method: :get, html: { class: "row gy-3 gx-3" } do |f| %>
-        <div class="col-md-3">
-          <%= f.label :nome_cont, "Nome", class: "form-label text-muted text-uppercase small fw-semibold" %>
-          <%= f.search_field :nome_cont, class: "form-control form-control-lg", placeholder: "Digite o nome do paciente" %>
+    <div style="padding: 1.35rem;">
+      <%= search_form_for @q, url: pacientes_path, method: :get, html: { style: "display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-end;" } do |f| %>
+        <div style="flex: 1 1 280px;">
+          <%= f.label :nome_cont, "Nome", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+          <%= f.search_field :nome_cont, placeholder: "Digite o nome completo ou parcial", class: "form-control", style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.7rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
         </div>
 
-        <div class="col-md-3">
-          <%= f.label :cpf_cont, "CPF", class: "form-label text-muted text-uppercase small fw-semibold" %>
-          <%= f.search_field :cpf_cont, class: "form-control form-control-lg", placeholder: "Somente números" %>
+        <div style="flex: 1 1 220px;">
+          <%= f.label :cpf_cont, "CPF", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+          <%= f.search_field :cpf_cont,
+                              placeholder: "000.000.000-00",
+                              class: "form-control",
+                              style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.7rem 0.9rem; font-size: 0.95rem; color: #1f2937;",
+                              data: { controller: "cpf-mask", action: "input->cpf-mask#format blur->cpf-mask#format" } %>
         </div>
 
-        <div class="col-md-3">
-          <%= f.label :email_cont, "E-mail", class: "form-label text-muted text-uppercase small fw-semibold" %>
-          <%= f.search_field :email_cont, class: "form-control form-control-lg", placeholder: "nome@hospital.com" %>
+        <div style="flex: 1 1 240px;">
+          <%= f.label :email_cont, "E-mail", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+          <%= f.search_field :email_cont, placeholder: "nome@hospital.com", class: "form-control", style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.7rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
         </div>
 
-        <div class="col-md-2">
-          <%= f.label :sexo_eq, "Sexo", class: "form-label text-muted text-uppercase small fw-semibold" %>
+        <div style="flex: 1 1 200px;">
+          <%= f.label :sexo_eq, "Sexo", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
           <%= f.select :sexo_eq,
                 [["Masculino", "masculino"], ["Feminino", "feminino"], ["Indefinido", "indefinido"]],
                 { include_blank: "Todos" },
-                class: "form-select form-select-lg" %>
+                { style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.7rem 0.9rem; font-size: 0.95rem; color: #1f2937; background: #fff;" } %>
         </div>
 
-        <div class="col-md-1 d-flex align-items-end">
-          <div class="d-grid w-100">
-            <%= f.submit "Aplicar", class: "btn btn-primary btn-lg fw-semibold" %>
-          </div>
-        </div>
-
-        <% if params[:q].present? %>
-          <div class="col-12 text-end">
-            <%= link_to pacientes_path, class: "btn btn-link text-decoration-none text-muted px-0" do %>
-              <i class="fas fa-undo me-1"></i> Limpar filtros
+        <div style="flex-basis: 100%; display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem; gap: 1rem;">
+          <div style="display: flex; gap: 0.75rem;">
+            <%= f.submit "Aplicar filtros", style: "padding: 0.7rem 1.3rem; background: #2563eb; color: #fff; border: none; border-radius: 8px; font-weight: 600; letter-spacing: 0.03em; cursor: pointer;" %>
+            <% if params[:q].present? %>
+              <%= link_to "Limpar filtros", pacientes_path, style: "padding: 0.7rem 1.3rem; border: 1px solid #e4e7ef; border-radius: 8px; font-weight: 600; letter-spacing: 0.03em; color: #4b5563; text-decoration: none;" %>
             <% end %>
           </div>
-        <% end %>
+          <% if params[:q].present? %>
+            <span style="font-size: 0.8rem; color: #6b7280; display: inline-flex; align-items: center; gap: 0.35rem;">
+              <i class="fas fa-info-circle"></i>
+              Resultados refinados pelos filtros selecionados
+            </span>
+          <% end %>
+        </div>
       <% end %>
     </div>
   </div>
@@ -116,92 +116,82 @@
         <i class="fas fa-list-ul"></i> Registros encontrados
       </span>
     </div>
-    <div class="table-responsive">
-      <table class="table table-hover align-middle mb-0">
-        <thead class="bg-primary text-white text-center">
-          <tr>
-            <th><%= sort_link(@q, :nome, "Nome", class: "text-white text-decoration-none") %></th>
-            <th>CPF</th>
-            <th>Sexo</th>
-            <th>Idade</th>
-            <th>Email</th>
-            <th>Celular</th>
-            <th>Data Nasc.</th>
-            <th>Observações</th>
-            <th class="text-end">Ações</th>
+    <div style="overflow-x: auto;">
+      <table style="width: 100%; border-collapse: collapse; font-size: 0.95rem; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+        <thead>
+          <tr style="background: #f4f6fb; text-transform: uppercase; letter-spacing: 0.04em; color: #52606d;">
+            <th style="border: 1px solid #e4e7ef; padding: 0.85rem; text-align: left; min-width: 180px;">
+              <%= sort_link(@q, :nome, "Nome", class: "text-decoration-none text-reset", style: "color: inherit; font-weight: 600;") %>
+            </th>
+            <th style="border: 1px solid #e4e7ef; padding: 0.85rem; text-align: left; min-width: 120px;">CPF</th>
+            <th style="border: 1px solid #e4e7ef; padding: 0.85rem; text-align: center; min-width: 120px;">Sexo</th>
+            <th style="border: 1px solid #e4e7ef; padding: 0.85rem; text-align: center; min-width: 90px;">Idade</th>
+            <th style="border: 1px solid #e4e7ef; padding: 0.85rem; text-align: left; min-width: 180px;">Email</th>
+            <th style="border: 1px solid #e4e7ef; padding: 0.85rem; text-align: left; min-width: 140px;">Celular</th>
+            <th style="border: 1px solid #e4e7ef; padding: 0.85rem; text-align: center; min-width: 120px;">Data Nasc.</th>
+            <th style="border: 1px solid #e4e7ef; padding: 0.85rem; text-align: left; min-width: 200px;">Observações</th>
+            <th style="border: 1px solid #e4e7ef; padding: 0.85rem; text-align: center; width: 200px;">Ações</th>
           </tr>
         </thead>
 
         <tbody>
           <% if @pacientes.any? %>
             <% @pacientes.each do |paciente| %>
-              <tr class="text-center">
-                <td class="fw-semibold text-start ps-3">
-                  <i class="fas fa-user-md text-primary me-2"></i>
-                  <%= paciente.nome %>
-                </td>
-                <td><%= paciente.cpf.presence || "-" %></td>
-                <td>
-                  <% if paciente.sexo.present? %>
-                    <% badge_color = case paciente.sexo
-                      when "masculino" then "primary"
-                      when "feminino" then "danger"
-                      else "secondary"
-                    end %>
-                    <span class="badge bg-<%= badge_color %> px-3 py-2"><%= paciente.sexo.capitalize %></span>
-                  <% else %>
-                    -
-                  <% end %>
-                </td>
-                <td>
-                  <% if paciente.data_nascimento.present? %>
-                    <% idade = ((Time.zone.now - paciente.data_nascimento.to_time) / 1.year.seconds).floor %>
-                    <%= idade %> anos
-                  <% else %>
-                    -
-                  <% end %>
-                </td>
-                <td><%= paciente.email.presence || "-" %></td>
-                <td><%= paciente.celular.presence || "-" %></td>
-                <td><%= paciente.data_nascimento&.strftime("%d/%m/%Y") || "-" %></td>
-                <td class="text-truncate" style="max-width: 180px;">
-                  <%= paciente.observacao.present? ? truncate(paciente.observacao, length: 40) : "-" %>
-                </td>
-
-                <td class="text-end pe-3">
-                  <div class="btn-group" role="group">
-                    <%= link_to paciente,
-                        class: "btn btn-sm btn-outline-primary d-flex align-items-center gap-1",
-                        data: { bs_toggle: "tooltip", bs_title: "Visualizar" } do %>
-                      <i class="fas fa-eye"></i>
-                      <span>Visualizar</span>
-                    <% end %>
-
-                    <%= link_to edit_paciente_path(paciente),
-                        class: "btn btn-sm btn-outline-success d-flex align-items-center gap-1",
-                        data: { bs_toggle: "tooltip", bs_title: "Editar" } do %>
-                      <i class="fas fa-edit"></i>
-                      <span>Editar</span>
-                    <% end %>
-
-                    <%= link_to paciente,
-                        class: "btn btn-sm btn-outline-danger d-flex align-items-center gap-1",
-                        data: {
-                          turbo_method: :delete,
-                          turbo_confirm: "Deseja realmente excluir este paciente?",
-                          bs_toggle: "tooltip",
-                          bs_title: "Excluir"
-                        } do %>
-                      <i class="fas fa-trash"></i>
-                      <span>Excluir</span>
-                    <% end %>
+              <% idade = if paciente.data_nascimento.present?
+                           ((Time.zone.now - paciente.data_nascimento.to_time) / 1.year.seconds).floor
+                         end %>
+              <% sexo_label, sexo_color = case paciente.sexo
+                when "masculino" then ["Masculino", "#2563eb"]
+                when "feminino" then ["Feminino", "#d946ef"]
+                when "indefinido" then ["Indefinido", "#64748b"]
+                else [nil, nil]
+              end %>
+              <tr style="border-bottom: 1px solid #eef1f7;">
+                <td style="border: 1px solid #e4e7ef; padding: 0.85rem;">
+                  <div style="display: flex; align-items: center; gap: 0.6rem;">
+                    <span style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background: #e3edff; color: #2d6cdf;">
+                      <i class="fas fa-user-md"></i>
+                    </span>
+                    <div>
+                      <div style="font-weight: 600; color: #1f2937;"><%= paciente.nome %></div>
+                      <div style="font-size: 0.75rem; color: #6b7280;"><%= paciente.email.presence || "Email não informado" %></div>
+                    </div>
                   </div>
+                </td>
+                <td style="border: 1px solid #e4e7ef; padding: 0.85rem; color: #374151;"><%= paciente.cpf.presence || "—" %></td>
+                <td style="border: 1px solid #e4e7ef; padding: 0.85rem; text-align: center;">
+                  <% if sexo_label.present? %>
+                    <span style="display: inline-block; padding: 0.35rem 0.85rem; border-radius: 999px; background: <%= sexo_color %>; color: #fff; font-size: 0.75rem; font-weight: 600;">
+                      <%= sexo_label %>
+                    </span>
+                  <% else %>
+                    —
+                  <% end %>
+                </td>
+                <td style="border: 1px solid #e4e7ef; padding: 0.85rem; text-align: center;">
+                  <%= idade.present? ? "#{idade} anos" : "—" %>
+                </td>
+                <td style="border: 1px solid #e4e7ef; padding: 0.85rem; color: #374151;"><%= paciente.email.presence || "—" %></td>
+                <td style="border: 1px solid #e4e7ef; padding: 0.85rem; color: #374151;"><%= paciente.celular.presence || "—" %></td>
+                <td style="border: 1px solid #e4e7ef; padding: 0.85rem; text-align: center;"><%= paciente.data_nascimento&.strftime("%d/%m/%Y") || "—" %></td>
+                <td style="border: 1px solid #e4e7ef; padding: 0.85rem; color: #4b5563;">
+                  <%= paciente.observacao.present? ? truncate(paciente.observacao, length: 50) : "—" %>
+                </td>
+                <td style="border: 1px solid #e4e7ef; padding: 0.85rem; text-align: center;">
+                  <%= link_to "Visualizar", paciente, style: "margin-right: 0.65rem; color: #2563eb; text-decoration: none; font-weight: 600;" %>
+                  <%= link_to "Editar", edit_paciente_path(paciente), style: "margin-right: 0.65rem; color: #16a34a; text-decoration: none; font-weight: 600;" %>
+                  <%= button_to "Excluir",
+                        paciente,
+                        method: :delete,
+                        data: { turbo_confirm: "Deseja realmente excluir #{paciente.nome}?" },
+                        form: { style: "display: inline;" },
+                        style: "background: transparent; border: none; color: #dc2626; cursor: pointer; font-weight: 600; text-decoration: underline;" %>
                 </td>
               </tr>
             <% end %>
           <% else %>
             <tr>
-              <td colspan="9" class="text-center py-4 text-muted">
+              <td colspan="9" style="padding: 1.25rem; text-align: center; color: #6b7280;">
                 <i class="fas fa-info-circle me-2"></i>
                 Nenhum paciente encontrado para os filtros aplicados.
               </td>

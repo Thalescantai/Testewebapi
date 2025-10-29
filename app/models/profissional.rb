@@ -6,6 +6,17 @@ class Profissional < ApplicationRecord
     administrador: "administrador"
   }, _prefix: true
 
+  ROLE_LABELS = {
+    "medico" => "Médico",
+    "recepcionista" => "Recepcionista",
+    "enfermeiro" => "Enfermeiro",
+    "administrador" => "Administrador"
+  }.freeze
+
+  before_save :normalize_email
+  before_validation :normalize_cpf
+  before_validation :normalize_telefone
+
   has_many :consultas, foreign_key: :medico_id, inverse_of: :medico, dependent: :nullify
 
   validates :nome, presence: true
@@ -13,6 +24,7 @@ class Profissional < ApplicationRecord
   validates :email, allow_blank: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :email, uniqueness: { allow_blank: true, case_sensitive: false }
   validates :cpf, allow_blank: true, uniqueness: true
+  validates :crm, presence: true, if: -> { cargo_medico? }
 
   def self.role_options_for_select
     ROLE_LABELS.map { |value, label| [label, value] }
@@ -23,11 +35,12 @@ class Profissional < ApplicationRecord
   def normalize_email
     self.email = email.downcase if email.present?
   end
+
+  def normalize_cpf
+    self.cpf = cpf.gsub(/\D/, "") if cpf.present?
+  end
+
+  def normalize_telefone
+    self.telefone = telefone.gsub(/\D/, "") if telefone.present?
+  end
 end
-  ROLE_LABELS = {
-    "medico" => "Médico",
-    "recepcionista" => "Recepcionista",
-    "enfermeiro" => "Enfermeiro",
-    "administrador" => "Administrador"
-  }.freeze
-  before_save :normalize_email

@@ -4,17 +4,45 @@
 
 <h1>Profissionais</h1>
 
-<div id="profissionais">
+<div id="profissionais" style="margin-top: 1.5rem;">
   <% if @profissionais.any? %>
-    <% @profissionais.each do |profissional| %>
-      <%= render profissional %>
-      <p>
-        <%= link_to "Ver profissional", profissional %>
-      </p>
-    <% end %>
+    <div style="overflow-x: auto;">
+      <table style="width: 100%; border-collapse: collapse; font-size: 0.95rem; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+        <thead>
+          <tr style="background: #f4f6fb; text-transform: uppercase; letter-spacing: 0.05em;">
+            <th style="border: 1px solid #e1e5ee; padding: 0.75rem; text-align: left;">Nome</th>
+            <th style="border: 1px solid #e1e5ee; padding: 0.75rem; text-align: left;">Email</th>
+            <th style="border: 1px solid #e1e5ee; padding: 0.75rem; text-align: left;">Telefone</th>
+            <th style="border: 1px solid #e1e5ee; padding: 0.75rem; text-align: left;">CPF</th>
+            <th style="border: 1px solid #e1e5ee; padding: 0.75rem; text-align: left;">Cargo</th>
+            <th style="border: 1px solid #e1e5ee; padding: 0.75rem; text-align: left;">CRM</th>
+            <th style="border: 1px solid #e1e5ee; padding: 0.75rem; text-align: center; width: 160px;">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @profissionais.each do |profissional| %>
+            <tr style="border-bottom: 1px solid #eef1f7;">
+              <td style="border: 1px solid #e1e5ee; padding: 0.75rem;"><%= profissional.nome %></td>
+              <td style="border: 1px solid #e1e5ee; padding: 0.75rem;"><%= profissional.email.presence || "—" %></td>
+              <td style="border: 1px solid #e1e5ee; padding: 0.75rem;"><%= profissional.telefone.presence || "—" %></td>
+              <td style="border: 1px solid #e1e5ee; padding: 0.75rem;"><%= profissional.cpf.presence || "—" %></td>
+              <td style="border: 1px solid #e1e5ee; padding: 0.75rem;"><%= Profissional::ROLE_LABELS[profissional.cargo] || profissional.cargo %></td>
+              <td style="border: 1px solid #e1e5ee; padding: 0.75rem;"><%= profissional.cargo_medico? ? profissional.crm.presence || "—" : "—" %></td>
+              <td style="border: 1px solid #e1e5ee; padding: 0.75rem; text-align: center;">
+                <%= link_to "Ver", profissional, style: "margin-right: 0.5rem;" %>
+                <%= link_to "Editar", edit_profissional_path(profissional), style: "margin-right: 0.5rem;" %>
+                <%= button_to "Excluir", profissional, method: :delete, data: { turbo_confirm: "Tem certeza que deseja excluir #{profissional.nome}?" }, form: { style: "display: inline;" }, style: "background: transparent; border: none; color: #d83a3a; cursor: pointer; text-decoration: underline;" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
   <% else %>
-    <p>Nenhum profissional cadastrado.</p>
+    <p style="padding: 1rem; border: 1px solid #e1e5ee; background: #f9fbff; border-radius: 4px;">Nenhum profissional cadastrado.</p>
   <% end %>
 </div>
 
-<%= link_to "Novo profissional", new_profissional_path %>
+<div style="margin-top: 1.5rem;">
+  <%= link_to "Novo profissional", new_profissional_path, style: "display: inline-block; padding: 0.65rem 1rem; background: #2d6cdf; color: #fff; text-decoration: none; border-radius: 4px;" %>
+</div>
