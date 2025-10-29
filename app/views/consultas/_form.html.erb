@@ -1,45 +1,91 @@
-<%= form_with(model: consulta) do |form| %>
-  <% if consulta.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(consulta.errors.count, "error") %> prohibited this consulta from being saved:</h2>
+<% paciente ||= @paciente || consulta.paciente %>
 
-      <ul>
-        <% consulta.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+<%= form_with(model: consulta,
+              local: true,
+              html: { style: "display: block; border: 1px solid #e4e7ef; border-radius: 12px; background: #fff; box-shadow: 0 2px 6px rgba(15,23,42,0.05); overflow: hidden;" }) do |form| %>
+  <div style="padding: 1.25rem 1.5rem; background: #f4f6fb; border-bottom: 1px solid #e4e7ef;">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; color: #636a7a;">
+          Consulta ambulatorial
+        </div>
+        <div style="font-size: 1.2rem; font-weight: 600; color: #1f2937; margin-top: 0.3rem;">
+          <%= consulta.new_record? ? "Marcar nova consulta" : "Atualizar consulta" %>
+        </div>
+      </div>
+      <i class="fas fa-stethoscope" style="font-size: 2rem; color: #10b981;"></i>
     </div>
-  <% end %>
-
-  <div>
-    <%= form.label :medico_id, "Médico responsável", style: "display: block" %>
-    <%= form.collection_select :medico_id, @medicos, :id, :nome, { include_blank: "Selecione..." }, { class: "select-medico" } %>
-    <% if @medicos.empty? %>
-      <small>Cadastre um profissional com cargo "Médico" para habilitar esta seleção.</small>
+    <% if paciente.present? %>
+      <div style="margin-top: 0.75rem; font-size: 0.85rem; color: #6b7280;">
+        <strong>Paciente:</strong> <%= paciente.nome %>
+      </div>
     <% end %>
   </div>
 
-  <div>
-    <%= form.label :data_hora, style: "display: block" %>
-    <%= form.datetime_field :data_hora %>
+  <div style="padding: 1.5rem;">
+    <% if consulta.errors.any? %>
+      <div style="border: 1px solid #fecaca; background: #fef2f2; color: #991b1b; border-radius: 8px; padding: 0.9rem 1rem; margin-bottom: 1.25rem;">
+        <div style="font-weight: 600; margin-bottom: 0.5rem;">
+          <i class="fas fa-exclamation-circle"></i>
+          <%= pluralize(consulta.errors.count, "erro impede", plural: "erros impedem") %> o salvamento:
+        </div>
+        <ul style="margin: 0; padding-left: 1.1rem;">
+          <% consulta.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <% if paciente.present? %>
+      <%= form.hidden_field :paciente_id, value: paciente.id %>
+    <% else %>
+      <div style="margin-bottom: 1.25rem;">
+        <%= form.label :paciente_id, "Paciente", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.collection_select :paciente_id, @pacientes, :id, :nome,
+              { include_blank: "Selecione o paciente..." },
+              { style: 'width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937; background: #fff;' } %>
+      </div>
+    <% end %>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem;">
+      <div style="min-width: 0;">
+        <%= form.label :medico_id, "Médico responsável", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.collection_select :medico_id, @medicos, :id, :nome,
+              { include_blank: "Selecione..." },
+              { style: 'width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937; background: #fff;' } %>
+        <% if @medicos.empty? %>
+          <small style="color: #9ca3af;">Cadastre um profissional com cargo \"Médico\" para habilitar esta seleção.</small>
+        <% end %>
+      </div>
+
+      <div style="min-width: 0;">
+        <%= form.label :data_hora, "Data e horário", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.datetime_field :data_hora, style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.7rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
+      </div>
+
+      <div style="min-width: 0;">
+        <%= form.label :tipo, "Tipo de consulta", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.text_field :tipo, placeholder: "Retorno, avaliação inicial...", style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
+      </div>
+    </div>
+
+    <div style="margin-top: 1.25rem;">
+      <%= form.label :anamnese, "Anamnese", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+      <%= form.text_area :anamnese, placeholder: "Resumo do histórico clínico e queixas apresentadas.", style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.9rem; font-size: 0.95rem; color: #1f2937; min-height: 120px;" %>
+    </div>
+
+    <div style="margin-top: 1.25rem;">
+      <%= form.label :diagnostico, "Diagnóstico / Conduta", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+      <%= form.text_area :diagnostico, placeholder: "Plano terapêutico, orientações e observações adicionais.", style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.9rem; font-size: 0.95rem; color: #1f2937; min-height: 120px;" %>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :tipo, style: "display: block" %>
-    <%= form.text_field :tipo %>
-  </div>
-
-  <div>
-    <%= form.label :anamnese, style: "display: block" %>
-    <%= form.text_area :anamnese %>
-  </div>
-
-  <div>
-    <%= form.label :diagnostico, style: "display: block" %>
-    <%= form.text_area :diagnostico %>
-  </div>
-
-  <div>
-    <%= form.submit %>
+  <div style="padding: 1.1rem 1.5rem; border-top: 1px solid #e4e7ef; background: #f9fafc; text-align: right;">
+    <% cancel_path = paciente.present? ? paciente : (consulta.persisted? ? consulta : consultas_path) %>
+    <%= link_to cancel_path, style: "margin-right: 0.75rem; padding: 0.65rem 1.2rem; border: 1px solid #e4e7ef; border-radius: 8px; font-weight: 600; color: #4b5563; text-decoration: none;" do %>
+      Cancelar
+    <% end %>
+    <%= form.submit consulta.new_record? ? "Salvar consulta" : "Atualizar consulta", style: "padding: 0.7rem 1.4rem; background: #2563eb; color: #fff; border: none; border-radius: 8px; font-weight: 600; letter-spacing: 0.03em; cursor: pointer; box-shadow: 0 2px 4px rgba(37,99,235,0.35);" %>
   </div>
 <% end %>

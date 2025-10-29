@@ -1,5 +1,6 @@
 class Paciente < ApplicationRecord
   has_one :endereco, dependent: :destroy
+  has_many :consultas, dependent: :nullify
   accepts_nested_attributes_for :endereco
 
   before_validation :normalize_cpf

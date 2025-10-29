@@ -1,3 +1,3 @@
 class Endereco < ApplicationRecord
-  belongs_to :paciente, optional: true
+  belongs_to :paciente
 end

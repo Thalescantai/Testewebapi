@@ -1,26 +1,40 @@
-<div id="<%= dom_id consulta %>">
-  <p>
-    <strong>Médico:</strong>
-    <%= consulta.medico&.nome || "-" %>
-  </p>
+<div id="<%= dom_id consulta %>" style="border: 1px solid #e4e7ef; border-radius: 12px; background: #fff; box-shadow: 0 2px 6px rgba(15,23,42,0.05); overflow: hidden;">
+  <div style="padding: 1.25rem 1.5rem; background: #f4f6fb; border-bottom: 1px solid #e4e7ef; display: flex; justify-content: space-between; align-items: center;">
+    <div>
+      <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; color: #636a7a;">
+        Consulta médica
+      </div>
+      <div style="font-size: 1.2rem; font-weight: 600; color: #1f2937; margin-top: 0.3rem;">
+        <%= consulta.data_hora.present? ? l(consulta.data_hora, format: :long) : "Data não informada" %>
+      </div>
+    </div>
+    <i class="fas fa-stethoscope" style="font-size: 2rem; color: #0ea5e9;"></i>
+  </div>
 
-  <p>
-    <strong>Data hora:</strong>
-    <%= consulta.data_hora %>
-  </p>
+  <div style="padding: 1.5rem;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+      <div>
+        <strong style="display: block; font-size: 0.75rem; text-transform: uppercase; color: #9ca3af;">Paciente</strong>
+        <span style="font-size: 0.95rem; color: #1f2937;"><%= consulta.paciente&.nome || "Não informado" %></span>
+      </div>
+      <div>
+        <strong style="display: block; font-size: 0.75rem; text-transform: uppercase; color: #9ca3af;">Profissional</strong>
+        <span style="font-size: 0.95rem; color: #1f2937;"><%= consulta.medico&.nome || "Não informado" %></span>
+      </div>
+      <div>
+        <strong style="display: block; font-size: 0.75rem; text-transform: uppercase; color: #9ca3af;">Tipo</strong>
+        <span style="font-size: 0.95rem; color: #1f2937;"><%= consulta.tipo.presence || "—" %></span>
+      </div>
+    </div>
 
-  <p>
-    <strong>Tipo:</strong>
-    <%= consulta.tipo %>
-  </p>
+    <div style="margin-top: 1.25rem;">
+      <strong style="display: block; font-size: 0.75rem; text-transform: uppercase; color: #9ca3af;">Anamnese</strong>
+      <p style="margin: 0.35rem 0 0; color: #4b5563;"><%= consulta.anamnese.presence || "Nenhuma informação registrada." %></p>
+    </div>
 
-  <p>
-    <strong>Anamnese:</strong>
-    <%= consulta.anamnese %>
-  </p>
-
-  <p>
-    <strong>Diagnostico:</strong>
-    <%= consulta.diagnostico %>
-  </p>
+    <div style="margin-top: 1.25rem;">
+      <strong style="display: block; font-size: 0.75rem; text-transform: uppercase; color: #9ca3af;">Diagnóstico / Conduta</strong>
+      <p style="margin: 0.35rem 0 0; color: #4b5563;"><%= consulta.diagnostico.presence || "Nenhuma informação registrada." %></p>
+    </div>
+  </div>
 </div>

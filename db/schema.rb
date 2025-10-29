@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_10_29_163005) do
+ActiveRecord::Schema[7.2].define(version: 2025_10_29_170000) do
   create_table "consultas", force: :cascade do |t|
     t.integer "medico_id"
     t.datetime "data_hora"
@@ -19,7 +19,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_29_163005) do
     t.text "diagnostico"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "paciente_id"
     t.index ["medico_id"], name: "index_consultas_on_medico_id"
+    t.index ["paciente_id"], name: "index_consultas_on_paciente_id"
   end
 
   create_table "enderecos", force: :cascade do |t|
@@ -86,6 +88,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_29_163005) do
     t.index ["email"], name: "index_profissionais_on_email", unique: true
   end
 
+  add_foreign_key "consultas", "pacientes"
   add_foreign_key "consultas", "profissionais", column: "medico_id"
   add_foreign_key "enderecos", "pacientes"
   add_foreign_key "exames", "consultas"

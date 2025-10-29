@@ -1,2 +1,28 @@
-<h1>Endereco#edit</h1>
-<p>Find me in app/views/endereco/edit.html.erb</p>
+<% content_for :title, "Editar endereço" %>
+
+<div class="container-xl py-4">
+  <section style="margin-bottom: 1.5rem;">
+    <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: center; justify-content: space-between;">
+      <div style="flex: 1 1 320px;">
+        <span style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0.75rem; border-radius: 999px; background: #c7d2fe; color: #4338ca; font-weight: 600; font-size: 0.85rem;">
+          <i class="fas fa-map"></i>
+          Atualização de endereço
+        </span>
+        <h1 style="margin: 1rem 0 0.4rem; font-size: 2rem; font-weight: 600; color: #1f2937;">
+          Editar endereço do paciente
+        </h1>
+        <p style="margin: 0; color: #6b7280; font-size: 0.95rem;">
+          Revise os dados do endereço para manter a comunicação com a equipe sempre precisa.
+        </p>
+      </div>
+      <% if @endereco.paciente.present? %>
+        <div style="flex: 0 0 auto; padding: 0.85rem 1.1rem; border: 1px solid #e4e7ef; border-radius: 10px; background: #fff; box-shadow: 0 1px 3px rgba(15,23,42,0.08); font-weight: 600; color: #2563eb;">
+          <i class="fas fa-user"></i>
+          <span style="margin-left: 0.5rem;">Paciente: <%= @endereco.paciente.nome %></span>
+        </div>
+      <% end %>
+    </div>
+  </section>
+
+  <%= render "form", endereco: @endereco %>
+</div>

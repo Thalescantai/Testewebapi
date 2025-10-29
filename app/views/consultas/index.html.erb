@@ -2,15 +2,62 @@
 
 <% content_for :title, "Consultas" %>
 
-<h1>Consultas</h1>
+<div class="container-xl py-4">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+    <h1 style="margin: 0; font-size: 2rem; font-weight: 600; color: #1f2937;">Consultas agendadas</h1>
+    <%= link_to "Nova consulta", new_consulta_path, style: "display: inline-block; padding: 0.65rem 1rem; background: #2563eb; color: #fff; text-decoration: none; border-radius: 8px; font-weight: 600;" %>
+  </div>
 
-<div id="consultas">
-  <% @consultas.each do |consulta| %>
-    <%= render consulta %>
-    <p>
-      <%= link_to "Show this consulta", consulta %>
-    </p>
-  <% end %>
+  <div style="overflow-x: auto; border: 1px solid #e4e7ef; border-radius: 12px; background: #fff; box-shadow: 0 2px 6px rgba(15,23,42,0.05);">
+    <table style="width: 100%; border-collapse: collapse; font-size: 0.95rem;">
+      <thead>
+        <tr style="background: #f4f6fb; text-transform: uppercase; letter-spacing: 0.04em; color: #52606d;">
+          <th style="border-bottom: 1px solid #e4e7ef; padding: 0.85rem; text-align: left; min-width: 200px;">Paciente</th>
+          <th style="border-bottom: 1px solid #e4e7ef; padding: 0.85rem; text-align: left; min-width: 160px;">Data / hora</th>
+          <th style="border-bottom: 1px solid #e4e7ef; padding: 0.85rem; text-align: left; min-width: 180px;">Médico</th>
+          <th style="border-bottom: 1px solid #e4e7ef; padding: 0.85rem; text-align: left; min-width: 160px;">Tipo</th>
+          <th style="border-bottom: 1px solid #e4e7ef; padding: 0.85rem; text-align: left; min-width: 220px;">Anamnese</th>
+          <th style="border-bottom: 1px solid #e4e7ef; padding: 0.85rem; text-align: center; width: 160px;">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @consultas.any? %>
+          <% @consultas.each do |consulta| %>
+            <tr style="border-bottom: 1px solid #eef1f7;">
+              <td style="padding: 0.85rem;">
+                <div style="font-weight: 600; color: #1f2937;"><%= consulta.paciente&.nome || "—" %></div>
+                <% if consulta.paciente&.cpf.present? %>
+                  <div style="font-size: 0.75rem; color: #6b7280;">CPF: <%= consulta.paciente.cpf %></div>
+                <% end %>
+              </td>
+              <td style="padding: 0.85rem; color: #1f2937;">
+                <%= consulta.data_hora.present? ? l(consulta.data_hora, format: :long) : "—" %>
+              </td>
+              <td style="padding: 0.85rem; color: #374151;">
+                <%= consulta.medico&.nome || "—" %>
+              </td>
+              <td style="padding: 0.85rem; color: #374151;">
+                <%= consulta.tipo.presence || "—" %>
+              </td>
+              <td style="padding: 0.85rem; color: #4b5563;">
+                <%= consulta.anamnese.present? ? truncate(consulta.anamnese, length: 60) : "—" %>
+              </td>
+              <td style="padding: 0.85rem; text-align: center;">
+                <%= link_to "Ver", consulta, style: "margin-right: 0.5rem; color: #2563eb; text-decoration: none; font-weight: 600;" %>
+                <%= link_to "Editar", edit_consulta_path(consulta), style: "margin-right: 0.5rem; color: #16a34a; text-decoration: none; font-weight: 600;" %>
+                <%= button_to "Excluir", consulta, method: :delete, data: { turbo_confirm: "Deseja remover esta consulta?" }, form: { style: "display: inline;" }, style: "background: transparent; border: none; color: #dc2626; cursor: pointer; font-weight: 600; text-decoration: underline;" %>
+              </td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <td colspan="6" style="padding: 1.25rem; text-align: center; color: #6b7280;">
+              <i class="fas fa-info-circle me-2"></i>
+              Nenhuma consulta agendada até o momento.
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 </div>
-
-<%= link_to "New consulta", new_consulta_path %>

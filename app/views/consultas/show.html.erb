@@ -1,10 +1,20 @@
 <p style="color: green"><%= notice %></p>
 
-<%= render @consulta %>
+<div class="container-xl py-4">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <h1 style="margin: 0; font-size: 2rem; font-weight: 600; color: #1f2937;">Detalhes da consulta</h1>
+    <div>
+      <%= link_to "Editar", edit_consulta_path(@consulta), style: "margin-right: 0.75rem; padding: 0.65rem 1.1rem; border: 1px solid #2563eb; border-radius: 8px; font-weight: 600; color: #2563eb; text-decoration: none; background: rgba(37,99,235,0.08);" %>
+      <%= button_to "Excluir", @consulta, method: :delete, form: { style: "display: inline;" }, data: { turbo_confirm: "Deseja remover esta consulta?" }, style: "padding: 0.65rem 1.1rem; border: 1px solid #dc2626; border-radius: 8px; font-weight: 600; color: #dc2626; background: rgba(220,38,38,0.08); cursor: pointer;" %>
+    </div>
+  </div>
 
-<div>
-  <%= link_to "Edit this consulta", edit_consulta_path(@consulta) %> |
-  <%= link_to "Back to consultas", consultas_path %>
+  <%= render @consulta %>
 
-  <%= button_to "Destroy this consulta", @consulta, method: :delete %>
+  <div style="margin-top: 1.5rem;">
+    <%= link_to "Voltar para consultas", consultas_path, style: "margin-right: 0.75rem; color: #2563eb; font-weight: 600; text-decoration: none;" %>
+    <% if @consulta.paciente.present? %>
+      <%= link_to "Ver paciente", @consulta.paciente, style: "color: #16a34a; font-weight: 600; text-decoration: none;" %>
+    <% end %>
+  </div>
 </div>

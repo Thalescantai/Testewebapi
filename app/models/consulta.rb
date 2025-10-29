@@ -1,9 +1,10 @@
 class Consulta < ApplicationRecord
-
+  belongs_to :paciente
   has_many :exames, dependent: :destroy
   belongs_to :medico, class_name: "Profissional", optional: true, inverse_of: :consultas
 
   validates :data_hora, presence: true
+  validates :paciente, presence: true
 
   def display_label
     parts = []

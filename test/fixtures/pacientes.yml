@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  nome: João Silva
+  cpf: 12345678900
+  sexo: masculino
+  data_nascimento: 1990-01-01
+  celular: "11999999999"
+  email: joao@example.com
+
+two:
+  nome: Maria Souza
+  cpf: 98765432100
+  sexo: feminino
+  data_nascimento: 1988-05-15
+  celular: "11988888888"
+  email: maria@example.com

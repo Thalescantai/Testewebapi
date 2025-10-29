@@ -29,7 +29,8 @@ class PacientesController < ApplicationController
 
     respond_to do |format|
       if @paciente.save
-        format.html { redirect_to @paciente, notice: "Paciente was successfully created." }
+        next_step_path = new_endereco_path(paciente_id: @paciente.id)
+        format.html { redirect_to next_step_path, notice: "Paciente cadastrado com sucesso. Agora informe o endereço." }
         format.json { render :show, status: :created, location: @paciente }
       else
         format.html { render :new, status: :unprocessable_entity }

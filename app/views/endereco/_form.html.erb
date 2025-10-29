@@ -1,0 +1,87 @@
+<% paciente ||= endereco.paciente %>
+
+<%= form_with(model: endereco,
+              local: true,
+              html: { style: "display: block; border: 1px solid #e4e7ef; border-radius: 12px; background: #fff; box-shadow: 0 2px 6px rgba(15,23,42,0.05); overflow: hidden;" }) do |form| %>
+  <div style="padding: 1.25rem 1.5rem; background: #f4f6fb; border-bottom: 1px solid #e4e7ef;">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; color: #636a7a;">
+          Endereço do paciente
+        </div>
+        <div style="font-size: 1.2rem; font-weight: 600; color: #1f2937; margin-top: 0.3rem;">
+          <%= endereco.new_record? ? "Novo endereço" : "Atualização de endereço" %>
+        </div>
+      </div>
+      <i class="fas fa-map-marker-alt" style="font-size: 2rem; color: #f97316;"></i>
+    </div>
+    <% if paciente.present? %>
+      <div style="margin-top: 0.75rem; font-size: 0.85rem; color: #6b7280;">
+        <strong>Paciente:</strong> <%= paciente.nome %>
+      </div>
+    <% end %>
+  </div>
+
+  <div style="padding: 1.5rem;">
+    <% if endereco.errors.any? %>
+      <div style="border: 1px solid #fecaca; background: #fef2f2; color: #991b1b; border-radius: 8px; padding: 0.9rem 1rem; margin-bottom: 1.25rem;">
+        <div style="font-weight: 600; margin-bottom: 0.5rem;">
+          <i class="fas fa-exclamation-circle"></i>
+          <%= pluralize(endereco.errors.count, "erro impede", plural: "erros impedem") %> o salvamento:
+        </div>
+        <ul style="margin: 0; padding-left: 1.1rem;">
+          <% endereco.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <%= form.hidden_field :paciente_id, value: paciente&.id || endereco.paciente_id %>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem;">
+      <div style="min-width: 0;">
+        <%= form.label :rua, "Rua", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.text_field :rua, placeholder: "Av. Principal", style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
+      </div>
+
+      <div style="min-width: 0;">
+        <%= form.label :numero, "Número", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.text_field :numero, placeholder: "123", style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
+      </div>
+
+      <div style="min-width: 0;">
+        <%= form.label :bairro, "Bairro", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.text_field :bairro, placeholder: "Centro", style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
+      </div>
+
+      <div style="min-width: 0;">
+        <%= form.label :cep, "CEP", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.text_field :cep, placeholder: "00000-000", inputmode: "numeric", style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
+      </div>
+
+      <div style="min-width: 0;">
+        <%= form.label :cidade, "Cidade", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.text_field :cidade, placeholder: "Cidade", style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
+      </div>
+
+      <div style="min-width: 0;">
+        <%= form.label :logradouro, "Logradouro", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.text_field :logradouro, placeholder: "Apartamento, bloco...", style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
+      </div>
+
+      <div style="min-width: 0; grid-column: 1 / -1;">
+        <%= form.label :complemento, "Complemento", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.text_field :complemento, placeholder: "Referência, ponto de apoio...", style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 1.1rem 1.5rem; border-top: 1px solid #e4e7ef; background: #f9fafc; text-align: right;">
+    <% cancel_path = paciente.present? ? paciente : endereco.persisted? ? endereco : enderecos_path %>
+    <%= link_to cancel_path, style: "margin-right: 0.75rem; padding: 0.65rem 1.2rem; border: 1px solid #e4e7ef; border-radius: 8px; font-weight: 600; color: #4b5563; text-decoration: none;" do %>
+      Cancelar
+    <% end %>
+    <%= form.submit endereco.new_record? ? "Salvar endereço" : "Atualizar endereço", style: "padding: 0.7rem 1.4rem; background: #2563eb; color: #fff; border: none; border-radius: 8px; font-weight: 600; letter-spacing: 0.03em; cursor: pointer; box-shadow: 0 2px 4px rgba(37,99,235,0.35);" %>
+  </div>
+<% end %>
