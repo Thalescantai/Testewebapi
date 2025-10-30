@@ -1,0 +1,67 @@
+<% content_for :title, "Realizar exame" %>
+
+<div class="container-xl py-4">
+  <div style="margin-bottom: 1.5rem;">
+    <h1 style="margin: 0; font-size: 2rem; font-weight: 600; color: #1f2937;">Realizar exame</h1>
+    <p style="margin: 0.5rem 0 0; color: #6b7280;">
+      Atualize as informações e anexe o resultado do exame.
+    </p>
+  </div>
+
+  <div style="border: 1px solid #e5e7eb; border-radius: 12px; background: #fff; box-shadow: 0 2px 6px rgba(15,23,42,0.08); overflow: hidden;">
+    <div style="padding: 1.2rem 1.5rem; background: #f9fafb; border-bottom: 1px solid #e5e7eb;">
+      <div style="font-weight: 600; color: #1f2937;"><%= @exame.nome_exame.presence || "Exame não nomeado" %></div>
+      <div style="font-size: 0.9rem; color: #6b7280;">
+        Paciente: <%= @exame.consulta.paciente&.nome || "Não informado" %> · Consulta em
+        <%= @exame.consulta.data_hora.present? ? l(@exame.consulta.data_hora, format: :long) : "data não informada" %>
+      </div>
+    </div>
+
+    <div style="padding: 1.5rem;">
+      <%= form_with model: @exame,
+                    url: concluir_realizacao_exame_path(@exame),
+                    method: :patch,
+                    local: true,
+                    html: { multipart: true, style: "display: grid; gap: 1.25rem;" } do |form| %>
+        <% if @exame.errors.any? %>
+          <div style="border: 1px solid #fecaca; background: #fef2f2; color: #991b1b; border-radius: 8px; padding: 0.9rem 1rem;">
+            <strong><%= pluralize(@exame.errors.count, "erro impede", plural: "erros impedem") %> o salvamento:</strong>
+            <ul style="margin: 0.6rem 0 0; padding-left: 1rem;">
+              <% @exame.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div>
+          <%= form.label :data_realizacao, "Data e horário da realização", style: "display: block; font-size: 0.8rem; font-weight: 600; color: #6b7280; margin-bottom: 0.35rem;" %>
+          <%= form.datetime_field :data_realizacao, style: "width: 100%; border: 1px solid #d1d5db; border-radius: 8px; padding: 0.7rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
+        </div>
+
+        <div>
+          <%= form.label :profissional_realizou_exame, "Profissional que realizou o exame", style: "display: block; font-size: 0.8rem; font-weight: 600; color: #6b7280; margin-bottom: 0.35rem;" %>
+          <%= form.text_field :profissional_realizou_exame, placeholder: "Nome completo", style: "width: 100%; border: 1px solid #d1d5db; border-radius: 8px; padding: 0.7rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
+        </div>
+
+        <div>
+          <%= form.label :arquivo_resultado, "Anexar resultado (PDF, JPG ou JPEG)", style: "display: block; font-size: 0.8rem; font-weight: 600; color: #6b7280; margin-bottom: 0.35rem;" %>
+          <%= form.file_field :arquivo_resultado, accept: ".pdf,image/jpeg,image/jpg", style: "width: 100%; border: 1px dashed #94a3b8; border-radius: 8px; padding: 1rem; background: #f8fafc;" %>
+          <% if @exame.arquivo_resultado.attached? %>
+            <div style="margin-top: 0.6rem;">
+              Arquivo atual:
+              <%= link_to @exame.arquivo_resultado.filename, url_for(@exame.arquivo_resultado), style: "color: #2563eb; font-weight: 600; text-decoration: none;" %>
+            </div>
+          <% end %>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+          <%= link_to "Cancelar",
+                      consulta_exames_path(@exame.consulta),
+                      style: "padding: 0.6rem 1.2rem; border-radius: 8px; border: 1px solid #d1d5db; color: #374151; text-decoration: none; font-weight: 600;" %>
+          <%= form.submit "Salvar realização", style: "padding: 0.6rem 1.2rem; border-radius: 8px; background: #2563eb; color: #fff; border: none; font-weight: 600; cursor: pointer;" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -17,7 +17,7 @@ class ExamesControllerTest < ActionDispatch::IntegrationTest
 
   test "should create exame" do
     assert_difference("Exame.count") do
-      post exames_url, params: { exame: { consulta_id: @exame.consulta_id, data_marcada: @exame.data_marcada, data_realizada: @exame.data_realizada, data_solicitacao: @exame.data_solicitacao, observacoes: @exame.observacoes, status: @exame.status, tipo_exame: @exame.tipo_exame } }
+      post exames_url, params: { exame: { consulta_id: @exame.consulta_id, nome_exame: @exame.nome_exame, data_exame: @exame.data_exame, observacao_exame: @exame.observacao_exame, status: @exame.status } }
     end
 
     assert_redirected_to exame_url(Exame.last)
@@ -34,7 +34,7 @@ class ExamesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update exame" do
-    patch exame_url(@exame), params: { exame: { consulta_id: @exame.consulta_id, data_marcada: @exame.data_marcada, data_realizada: @exame.data_realizada, data_solicitacao: @exame.data_solicitacao, observacoes: @exame.observacoes, status: @exame.status, tipo_exame: @exame.tipo_exame } }
+    patch exame_url(@exame), params: { exame: { consulta_id: @exame.consulta_id, nome_exame: @exame.nome_exame, data_exame: @exame.data_exame, observacao_exame: @exame.observacao_exame, status: @exame.status } }
     assert_redirected_to exame_url(@exame)
   end
 

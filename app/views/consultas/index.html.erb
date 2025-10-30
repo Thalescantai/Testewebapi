@@ -16,7 +16,8 @@
           <th style="border-bottom: 1px solid #e4e7ef; padding: 0.85rem; text-align: left; min-width: 160px;">Data / hora</th>
           <th style="border-bottom: 1px solid #e4e7ef; padding: 0.85rem; text-align: left; min-width: 180px;">Médico</th>
           <th style="border-bottom: 1px solid #e4e7ef; padding: 0.85rem; text-align: left; min-width: 160px;">Tipo</th>
-          <th style="border-bottom: 1px solid #e4e7ef; padding: 0.85rem; text-align: left; min-width: 220px;">Anamnese</th>
+          <th style="border-bottom: 1px solid #e4e7ef; padding: 0.85rem; text-align: left; min-width: 220px;">Exames</th>
+          <th style="border-bottom: 1px solid #e4e7ef; padding: 0.85rem; text-align: center; min-width: 140px;">Status</th>
           <th style="border-bottom: 1px solid #e4e7ef; padding: 0.85rem; text-align: center; width: 160px;">Ações</th>
         </tr>
       </thead>
@@ -40,9 +41,57 @@
                 <%= consulta.tipo.presence || "—" %>
               </td>
               <td style="padding: 0.85rem; color: #4b5563;">
-                <%= consulta.anamnese.present? ? truncate(consulta.anamnese, length: 60) : "—" %>
+                <% if consulta.exames.any? %>
+                  <ul style="margin: 0; padding-left: 1.1rem; display: grid; gap: 0.35rem;">
+                    <% consulta.exames.each do |exame| %>
+                      <li>
+                        <strong><%= exame.nome_exame.presence || "Exame sem nome" %></strong>
+                        <% if exame.data_exame.present? %>
+                          <span style="color: #6b7280;">— <%= l(exame.data_exame) %></span>
+                        <% end %>
+                        <% if exame.observacao_exame.present? %>
+                          <div style="font-size: 0.85rem; color: #6b7280;"><%= truncate(exame.observacao_exame, length: 60) %></div>
+                        <% end %>
+                      </li>
+                    <% end %>
+                  </ul>
+                <% else %>
+                  <span style="color: #6b7280;">Nenhum exame vinculado</span>
+                <% end %>
+              </td>
+              <td style="padding: 0.85rem; color: #4b5563;">
+                <% status_labels = {
+                     "agendado" => "Agendado",
+                     "atendido" => "Atendido",
+                     "faltou" => "Faltou",
+                     "finalizado" => "Finalizado"
+                   } %>
+                <% status_colors = {
+                     "agendado" => ["#dbeafe", "#1d4ed8"],
+                     "atendido" => ["#dcfce7", "#15803d"],
+                     "faltou" => ["#fee2e2", "#b91c1c"],
+                     "finalizado" => ["#ede9fe", "#6d28d9"]
+                   } %>
+                <% current_status = consulta.status %>
+                <% bg, fg = status_colors.fetch(current_status, ["#e5e7eb", "#374151"]) %>
+                <span style="display: inline-block; padding: 0.35rem 0.8rem; border-radius: 999px; font-weight: 600; font-size: 0.85rem; background: <%= bg %>; color: <%= fg %>;">
+                  <%= status_labels.fetch(current_status, current_status.humanize) %>
+                </span>
               </td>
               <td style="padding: 0.85rem; text-align: center;">
+                <% if consulta.checkin? %>
+                  <span style="display: inline-block; margin-right: 0.5rem; padding: 0.4rem 0.75rem; border-radius: 999px; background: #dcfce7; color: #15803d; font-weight: 600; font-size: 0.85rem;">
+                    Check-in realizado
+                  </span>
+                <% else %>
+                  <%= button_to "Dar check-in",
+                                checkin_consulta_path(consulta),
+                                method: :patch,
+                                class: "btn btn-sm",
+                                form: { style: "display: inline;" },
+                                style: "display: inline-block; margin-right: 0.5rem; padding: 0.45rem 0.9rem; border-radius: 8px; background: #2563eb; color: #fff; border: none; cursor: pointer; font-weight: 600;",
+                                data: { turbo_confirm: "Confirmar check-in para esta consulta?" } %>
+                <% end %>
                 <%= link_to "Ver", consulta, style: "margin-right: 0.5rem; color: #2563eb; text-decoration: none; font-weight: 600;" %>
                 <%= link_to "Editar", edit_consulta_path(consulta), style: "margin-right: 0.5rem; color: #16a34a; text-decoration: none; font-weight: 600;" %>
                 <%= button_to "Excluir", consulta, method: :delete, data: { turbo_confirm: "Deseja remover esta consulta?" }, form: { style: "display: inline;" }, style: "background: transparent; border: none; color: #dc2626; cursor: pointer; font-weight: 600; text-decoration: underline;" %>
@@ -51,7 +100,7 @@
           <% end %>
         <% else %>
           <tr>
-            <td colspan="6" style="padding: 1.25rem; text-align: center; color: #6b7280;">
+            <td colspan="7" style="padding: 1.25rem; text-align: center; color: #6b7280;">
               <i class="fas fa-info-circle me-2"></i>
               Nenhuma consulta agendada até o momento.
             </td>

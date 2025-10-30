@@ -1,12 +1,19 @@
-<% content_for :title, "Editar exame" %>
+<% content_for :title, "Remarcar exame" %>
 
-<h1>Editar exame</h1>
+<div class="container-xl py-4">
+  <section style="margin-bottom: 1.5rem;">
+    <h1 style="margin: 0; font-size: 2rem; font-weight: 600; color: #1f2937;">Remarcar exame</h1>
+    <p style="margin: 0.4rem 0 0; color: #6b7280;">
+      Ajuste apenas as informações do exame para o paciente.
+    </p>
+  </section>
 
-<%= render "form", exame: @exame %>
+  <div style="border: 1px solid #e5e7eb; border-radius: 12px; background: #fff; box-shadow: 0 2px 6px rgba(15,23,42,0.08); padding: 1.5rem;">
+    <div style="margin-bottom: 1.25rem; font-size: 0.9rem; color: #6b7280;">
+      <strong>Paciente:</strong> <%= @exame.consulta.paciente&.nome || "Não informado" %><br>
+      <strong>Consulta:</strong> <%= @exame.consulta.display_label %>
+    </div>
 
-<br>
-
-<div>
-  <%= link_to "Ver exame", @exame %> |
-  <%= link_to "Voltar para exames", exames_path %>
+    <%= render "form", exame: @exame, redirect_to_consulta: @redirect_to_consulta %>
+  </div>
 </div>

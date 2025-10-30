@@ -1,5 +1,5 @@
 <div id="<%= dom_id consulta %>" style="border: 1px solid #e4e7ef; border-radius: 12px; background: #fff; box-shadow: 0 2px 6px rgba(15,23,42,0.05); overflow: hidden;">
-  <div style="padding: 1.25rem 1.5rem; background: #f4f6fb; border-bottom: 1px solid #e4e7ef; display: flex; justify-content: space-between; align-items: center;">
+  <div style="padding: 1.25rem 1.5rem; background: #f4f6fb; border-bottom: 1px solid #e4e7ef; display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
     <div>
       <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; color: #636a7a;">
         Consulta médica
@@ -8,7 +8,26 @@
         <%= consulta.data_hora.present? ? l(consulta.data_hora, format: :long) : "Data não informada" %>
       </div>
     </div>
-    <i class="fas fa-stethoscope" style="font-size: 2rem; color: #0ea5e9;"></i>
+    <% status_labels = {
+         "agendado" => "Agendado",
+         "atendido" => "Atendido",
+         "faltou" => "Faltou",
+         "finalizado" => "Finalizado"
+       } %>
+    <% status_colors = {
+         "agendado" => ["#dbeafe", "#1d4ed8"],
+         "atendido" => ["#dcfce7", "#15803d"],
+         "faltou" => ["#fee2e2", "#b91c1c"],
+         "finalizado" => ["#ede9fe", "#6d28d9"]
+       } %>
+    <% current_status = consulta.status %>
+    <% bg, fg = status_colors.fetch(current_status, ["#e5e7eb", "#374151"]) %>
+    <div style="display: flex; align-items: center; gap: 0.75rem;">
+      <span style="display: inline-block; padding: 0.35rem 0.8rem; border-radius: 999px; font-weight: 600; font-size: 0.85rem; background: <%= bg %>; color: <%= fg %>;">
+        <%= status_labels.fetch(current_status, current_status.humanize) %>
+      </span>
+      <i class="fas fa-stethoscope" style="font-size: 2rem; color: #0ea5e9;"></i>
+    </div>
   </div>
 
   <div style="padding: 1.5rem;">
@@ -28,13 +47,32 @@
     </div>
 
     <div style="margin-top: 1.25rem;">
-      <strong style="display: block; font-size: 0.75rem; text-transform: uppercase; color: #9ca3af;">Anamnese</strong>
-      <p style="margin: 0.35rem 0 0; color: #4b5563;"><%= consulta.anamnese.presence || "Nenhuma informação registrada." %></p>
+      <strong style="display: block; font-size: 0.75rem; text-transform: uppercase; color: #9ca3af;">Diagnóstico / Conduta</strong>
+      <p style="margin: 0.35rem 0 0; color: #4b5563;"><%= consulta.diagnostico.presence || "Nenhuma informação registrada." %></p>
     </div>
 
     <div style="margin-top: 1.25rem;">
-      <strong style="display: block; font-size: 0.75rem; text-transform: uppercase; color: #9ca3af;">Diagnóstico / Conduta</strong>
-      <p style="margin: 0.35rem 0 0; color: #4b5563;"><%= consulta.diagnostico.presence || "Nenhuma informação registrada." %></p>
+      <strong style="display: block; font-size: 0.75rem; text-transform: uppercase; color: #9ca3af;">Exames vinculados</strong>
+      <% if consulta.exames.any? %>
+        <ul style="margin: 0.5rem 0 0; padding-left: 1.1rem; color: #4b5563; display: grid; gap: 0.65rem;">
+          <% consulta.exames.each do |exame| %>
+            <li>
+              <div style="font-weight: 600; color: #1f2937;"><%= exame.nome_exame.presence || "Exame sem nome" %></div>
+              <div style="font-size: 0.85rem; color: #6b7280;">
+                <% if exame.data_exame.present? %>
+                  Data: <%= l(exame.data_exame) %><br>
+                <% end %>
+                Status: <%= Exame::STATUS_LABELS.fetch(exame.status, exame.status.humanize) %>
+              </div>
+              <% if exame.observacao_exame.present? %>
+                <div style="margin-top: 0.35rem;"><%= exame.observacao_exame %></div>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p style="margin: 0.5rem 0 0; color: #6b7280;">Nenhum exame cadastrado para esta consulta.</p>
+      <% end %>
     </div>
   </div>
 </div>

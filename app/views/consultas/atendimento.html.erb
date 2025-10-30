@@ -1,0 +1,53 @@
+<% content_for :title, "Iniciar atendimento" %>
+
+<div class="container-xl py-4">
+  <section style="margin-bottom: 1.5rem;">
+    <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: center; justify-content: space-between;">
+      <div style="flex: 1 1 320px;">
+        <span style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0.75rem; border-radius: 999px; background: #fde68a; color: #b45309; font-weight: 600; font-size: 0.85rem;">
+          <i class="fas fa-user-md"></i>
+          Atendimento em andamento
+        </span>
+        <h1 style="margin: 1rem 0 0.4rem; font-size: 2rem; font-weight: 600; color: #1f2937;">
+          Revisar e registrar informações da consulta
+        </h1>
+        <p style="margin: 0; color: #6b7280; font-size: 0.95rem;">
+          Confira os dados do paciente, atualize observações clínicas e finalize o atendimento quando concluir.
+        </p>
+      </div>
+      <% if @paciente.present? %>
+        <div style="flex: 0 0 auto; padding: 1rem 1.25rem; border: 1px solid #fcd34d; border-radius: 12px; background: #fffbeb; box-shadow: 0 1px 3px rgba(15,23,42,0.08); min-width: 240px;">
+          <div style="display: flex; align-items: center; gap: 0.6rem; color: #92400e; font-weight: 600;">
+            <i class="fas fa-user-circle"></i>
+            <span><%= @paciente.nome %></span>
+          </div>
+          <dl style="margin: 0.75rem 0 0; font-size: 0.85rem; color: #6b7280;">
+            <% if @paciente.cpf.present? %>
+              <div style="display: flex; justify-content: space-between;">
+                <dt style="font-weight: 600;">CPF:</dt>
+                <dd style="margin: 0;"><%= @paciente.cpf %></dd>
+              </div>
+            <% end %>
+            <% if @paciente.celular.present? %>
+              <div style="display: flex; justify-content: space-between;">
+                <dt style="font-weight: 600;">Celular:</dt>
+                <dd style="margin: 0;"><%= @paciente.celular %></dd>
+              </div>
+            <% end %>
+            <% if @paciente.email.present? %>
+              <div style="display: flex; justify-content: space-between;">
+                <dt style="font-weight: 600;">E-mail:</dt>
+                <dd style="margin: 0;"><%= @paciente.email %></dd>
+              </div>
+            <% end %>
+          </dl>
+          <div style="margin-top: 0.75rem; font-size: 0.8rem; color: #92400e;">
+            Consulta agendada para <strong><%= @consulta.data_hora.present? ? l(@consulta.data_hora, format: :long) : "data não informada" %></strong>.
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </section>
+
+  <%= render "form", consulta: @consulta, paciente: @paciente, show_exams: true, show_diagnostico: true, submit_label: "Finalizar atendimento", finalize: true %>
+</div>

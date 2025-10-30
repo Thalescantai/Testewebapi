@@ -1,14 +1,30 @@
 class ConsultasController < ApplicationController
-  before_action :set_consulta, only: %i[show edit update destroy]
-  before_action :set_profissional_options, only: %i[new edit create update]
+  before_action :set_consulta, only: %i[show edit update destroy checkin iniciar_atendimento]
+  before_action :set_profissional_options, only: %i[new edit create update iniciar_atendimento]
   before_action :set_paciente_from_params, only: %i[new create]
-  before_action :set_paciente_options, only: %i[new edit create update]
+  before_action :set_paciente_options, only: %i[new edit create update iniciar_atendimento]
 
   def index
-    @consultas = Consulta.includes(:medico, :paciente).order(data_hora: :desc)
+    @consultas = Consulta.includes(:medico, :paciente, :exames).order(data_hora: :desc)
+  end
+
+  def medico
+    intervalo_dia = Time.zone.today.beginning_of_day..Time.zone.today.end_of_day
+
+    @consultas_hoje = Consulta.includes(:paciente, :medico)
+                              .where(data_hora: intervalo_dia)
+                              .order(:data_hora)
+
+    @checkins_realizados = Consulta.includes(:paciente, :medico)
+                                   .where(checkin: true, data_hora: intervalo_dia)
+                                   .order(:data_hora)
   end
 
   def show; end
+
+  def iniciar_atendimento
+    render :atendimento
+  end
 
   def new
     @consulta = Consulta.new(paciente: @paciente)
@@ -34,13 +50,21 @@ class ConsultasController < ApplicationController
   end
 
   def update
+    finalizando = params[:finalizar_atendimento].present?
+
+    @consulta.assign_attributes(consulta_params)
+    @consulta.status = :finalizado if finalizando
+    @consulta.checkin = true if finalizando && !@consulta.checkin?
+
     respond_to do |format|
-      if @consulta.update(consulta_params)
-        destino = @consulta.paciente || @consulta
-        format.html { redirect_to destino, notice: "Consulta atualizada com sucesso.", status: :see_other }
+      if @consulta.save
+        destino = finalizando ? exames_path : (@consulta.paciente || @consulta)
+        aviso = finalizando ? "Atendimento finalizado. Exames encaminhados para análise." : "Consulta atualizada com sucesso."
+        format.html { redirect_to destino, notice: aviso, status: :see_other }
         format.json { render :show, status: :ok, location: @consulta }
       else
-        format.html { render :edit, status: :unprocessable_entity }
+        template = finalizando ? :atendimento : :edit
+        format.html { render template, status: :unprocessable_entity }
         format.json { render json: @consulta.errors, status: :unprocessable_entity }
       end
     end
@@ -56,15 +80,37 @@ class ConsultasController < ApplicationController
     end
   end
 
+  def checkin
+    respond_to do |format|
+      if @consulta.checkin?
+        format.html { redirect_to consultas_path, notice: "Check-in já havia sido realizado para esta consulta.", status: :see_other }
+        format.json { render :show, status: :ok, location: @consulta }
+      else
+        novo_status = @consulta.finalizado? ? :finalizado : :atendido
+        if @consulta.update(checkin: true, status: novo_status)
+          format.html { redirect_to consultas_path, notice: "Check-in realizado com sucesso.", status: :see_other }
+          format.json { render :show, status: :ok, location: @consulta }
+        else
+          format.html { redirect_to consultas_path, alert: "Não foi possível registrar o check-in.", status: :see_other }
+          format.json { render json: @consulta.errors, status: :unprocessable_entity }
+        end
+      end
+    end
+  end
+
   private
 
   def set_consulta
-    @consulta = Consulta.find(params[:id])
+    @consulta = Consulta.includes(:exames).find(params[:id])
     @paciente = @consulta.paciente
+    if %w[edit iniciar_atendimento].include?(action_name) && @consulta.exames.empty?
+      @consulta.exames.build
+    end
   end
 
   def consulta_params
-    params.require(:consulta).permit(:medico_id, :paciente_id, :data_hora, :tipo, :anamnese, :diagnostico)
+    params.require(:consulta).permit(:medico_id, :paciente_id, :data_hora, :tipo, :diagnostico, :checkin, :status,
+                                     exames_attributes: %i[id nome_exame data_exame observacao_exame status _destroy])
   end
 
   def set_profissional_options

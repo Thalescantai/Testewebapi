@@ -1,4 +1,8 @@
 <% paciente ||= @paciente || consulta.paciente %>
+<% show_exams = local_assigns.fetch(:show_exams, true) %>
+<% show_diagnostico = local_assigns.fetch(:show_diagnostico, true) %>
+<% submit_label = local_assigns.fetch(:submit_label, consulta.new_record? ? "Salvar consulta" : "Atualizar consulta") %>
+<% finalize = local_assigns.fetch(:finalize, false) %>
 
 <%= form_with(model: consulta,
               local: true,
@@ -68,17 +72,54 @@
         <%= form.label :tipo, "Tipo de consulta", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
         <%= form.text_field :tipo, placeholder: "Retorno, avaliação inicial...", style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
       </div>
+
+      <div style="min-width: 0;">
+        <%= form.label :status, "Status", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.select :status,
+              Consulta.statuses.keys.map { |key| [I18n.t("activerecord.attributes.consulta.statuses.#{key}", default: key.humanize), key] },
+              {},
+              style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937; background: #fff;" %>
+      </div>
     </div>
 
-    <div style="margin-top: 1.25rem;">
-      <%= form.label :anamnese, "Anamnese", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
-      <%= form.text_area :anamnese, placeholder: "Resumo do histórico clínico e queixas apresentadas.", style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.9rem; font-size: 0.95rem; color: #1f2937; min-height: 120px;" %>
-    </div>
+    <% if show_exams %>
+      <div style="margin-top: 1.75rem;">
+        <div data-controller="nested-form"
+             data-nested-form-wrapper-selector-value=".exame-fields"
+             data-nested-form-max-items-value="10">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem;">
+            <div style="font-size: 0.9rem; font-weight: 700; color: #1f2937; text-transform: uppercase; letter-spacing: 0.05em;">
+              Exames vinculados
+            </div>
+            <%= button_tag type: :button,
+                           class: "add-exame-button",
+                           data: { action: "click->nested-form#add", nested_form_target: "addButton" },
+                           style: "padding: 0.55rem 1rem; border: 1px dashed #2563eb; border-radius: 8px; background: rgba(37,99,235,0.08); color: #2563eb; font-weight: 600; cursor: pointer;" do %>
+              + Adicionar exame
+            <% end %>
+          </div>
 
-    <div style="margin-top: 1.25rem;">
-      <%= form.label :diagnostico, "Diagnóstico / Conduta", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
-      <%= form.text_area :diagnostico, placeholder: "Plano terapêutico, orientações e observações adicionais.", style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.9rem; font-size: 0.95rem; color: #1f2937; min-height: 120px;" %>
-    </div>
+          <template data-nested-form-target="template">
+            <%= form.fields_for :exames, Exame.new, child_index: "NEW_RECORD" do |exame_form| %>
+              <%= render "consultas/exame_fields", f: exame_form %>
+            <% end %>
+          </template>
+
+          <div data-nested-form-target="container">
+            <%= form.fields_for :exames do |exame_form| %>
+              <%= render "consultas/exame_fields", f: exame_form %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <% if show_diagnostico %>
+      <div style="margin-top: 1.25rem;">
+        <%= form.label :diagnostico, "Diagnóstico / Conduta", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
+        <%= form.text_area :diagnostico, placeholder: "Plano terapêutico, orientações e observações adicionais.", style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.9rem; font-size: 0.95rem; color: #1f2937; min-height: 120px;" %>
+      </div>
+    <% end %>
   </div>
 
   <div style="padding: 1.1rem 1.5rem; border-top: 1px solid #e4e7ef; background: #f9fafc; text-align: right;">
@@ -86,6 +127,7 @@
     <%= link_to cancel_path, style: "margin-right: 0.75rem; padding: 0.65rem 1.2rem; border: 1px solid #e4e7ef; border-radius: 8px; font-weight: 600; color: #4b5563; text-decoration: none;" do %>
       Cancelar
     <% end %>
-    <%= form.submit consulta.new_record? ? "Salvar consulta" : "Atualizar consulta", style: "padding: 0.7rem 1.4rem; background: #2563eb; color: #fff; border: none; border-radius: 8px; font-weight: 600; letter-spacing: 0.03em; cursor: pointer; box-shadow: 0 2px 4px rgba(37,99,235,0.35);" %>
+    <%= hidden_field_tag :finalizar_atendimento, "1" if finalize %>
+    <%= form.submit submit_label, style: "padding: 0.7rem 1.4rem; background: #2563eb; color: #fff; border: none; border-radius: 8px; font-weight: 600; letter-spacing: 0.03em; cursor: pointer; box-shadow: 0 2px 4px rgba(37,99,235,0.35);" %>
   </div>
 <% end %>

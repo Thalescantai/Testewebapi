@@ -7,46 +7,41 @@ class ExamesTest < ApplicationSystemTestCase
 
   test "visiting the index" do
     visit exames_url
-    assert_selector "h1", text: "Exames"
+    assert_selector "h1", text: "Fila de exames"
   end
 
   test "should create exame" do
     visit exames_url
-    click_on "New exame"
+    click_on "Novo exame"
 
-    fill_in "Consulta", with: @exame.consulta_id
-    fill_in "Data marcada", with: @exame.data_marcada
-    fill_in "Data realizada", with: @exame.data_realizada
-    fill_in "Data solicitacao", with: @exame.data_solicitacao
-    fill_in "Observacoes", with: @exame.observacoes
-    fill_in "Status", with: @exame.status
-    fill_in "Tipo exame", with: @exame.tipo_exame
-    click_on "Create Exame"
+    select @exame.consulta.display_label, from: "Consulta"
+    fill_in "Nome do exame", with: @exame.nome_exame
+    fill_in "Data do exame", with: @exame.data_exame
+    select Exame::STATUS_LABELS[@exame.status], from: "Status"
+    fill_in "Observações", with: @exame.observacao_exame
+    click_on "Criar exame"
 
     assert_text "Exame was successfully created"
-    click_on "Back"
+    click_on "Voltar para exames"
   end
 
   test "should update Exame" do
     visit exame_url(@exame)
-    click_on "Edit this exame", match: :first
+    click_on "Editar exame", match: :first
 
-    fill_in "Consulta", with: @exame.consulta_id
-    fill_in "Data marcada", with: @exame.data_marcada
-    fill_in "Data realizada", with: @exame.data_realizada
-    fill_in "Data solicitacao", with: @exame.data_solicitacao
-    fill_in "Observacoes", with: @exame.observacoes
-    fill_in "Status", with: @exame.status
-    fill_in "Tipo exame", with: @exame.tipo_exame
-    click_on "Update Exame"
+    fill_in "Nome do exame", with: @exame.nome_exame
+    fill_in "Data do exame", with: @exame.data_exame
+    select Exame::STATUS_LABELS[@exame.status], from: "Status"
+    fill_in "Observações", with: @exame.observacao_exame
+    click_on "Atualizar exame"
 
     assert_text "Exame was successfully updated"
-    click_on "Back"
+    click_on "Voltar para exames"
   end
 
   test "should destroy Exame" do
     visit exame_url(@exame)
-    click_on "Destroy this exame", match: :first
+    click_on "Excluir exame", match: :first
 
     assert_text "Exame was successfully destroyed"
   end

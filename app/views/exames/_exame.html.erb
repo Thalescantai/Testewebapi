@@ -5,23 +5,8 @@
   </p>
 
   <p>
-    <strong>Tipo de exame:</strong>
-    <%= exame.tipo_exame %>
-  </p>
-
-  <p>
-    <strong>Data de solicitação:</strong>
-    <%= exame.data_solicitacao %>
-  </p>
-
-  <p>
-    <strong>Data marcada:</strong>
-    <%= exame.data_marcada %>
-  </p>
-
-  <p>
-    <strong>Data realizada:</strong>
-    <%= exame.data_realizada %>
+    <strong>Nome do exame:</strong>
+    <%= exame.nome_exame %>
   </p>
 
   <p>
@@ -30,8 +15,30 @@
   </p>
 
   <p>
-    <strong>Observações:</strong>
-    <%= exame.observacoes %>
+    <strong>Data do exame:</strong>
+    <%= exame.data_exame %>
   </p>
+
+  <p>
+    <strong>Realizado em:</strong>
+    <%= exame.data_realizacao ? l(exame.data_realizacao, format: :long) : "-" %>
+  </p>
+
+  <p>
+    <strong>Profissional responsável:</strong>
+    <%= exame.profissional_realizou_exame.presence || "-" %>
+  </p>
+
+  <p>
+    <strong>Observações:</strong>
+    <%= exame.observacao_exame %>
+  </p>
+
+  <% if exame.arquivo_resultado.attached? %>
+    <p>
+      <strong>Resultado:</strong>
+      <%= link_to exame.arquivo_resultado.filename, url_for(exame.arquivo_resultado) %>
+    </p>
+  <% end %>
 
 </div>

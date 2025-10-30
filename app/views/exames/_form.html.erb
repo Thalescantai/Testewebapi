@@ -1,9 +1,9 @@
-<%= form_with(model: exame) do |form| %>
+<% redirect_to_consulta = local_assigns.fetch(:redirect_to_consulta, false) %>
+<%= form_with(model: exame, local: true, html: { style: "display: grid; gap: 1.25rem;" }) do |form| %>
   <% if exame.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(exame.errors.count, "error") %> prohibited this exame from being saved:</h2>
-
-      <ul>
+    <div style="border: 1px solid #fecaca; background: #fef2f2; color: #991b1b; border-radius: 8px; padding: 0.9rem 1rem;">
+      <strong><%= pluralize(exame.errors.count, "erro impede", plural: "erros impedem") %> o salvamento:</strong>
+      <ul style="margin: 0.6rem 0 0; padding-left: 1rem;">
         <% exame.errors.each do |error| %>
           <li><%= error.full_message %></li>
         <% end %>
@@ -12,44 +12,45 @@
   <% end %>
 
   <div>
-    <%= form.label :consulta_id, "Consulta", style: "display: block" %>
-    <%= form.collection_select :consulta_id, @consultas, :id, :display_label, { include_blank: "Selecione..." } %>
-    <% if @consultas.empty? %>
-      <small>Nenhuma consulta cadastrada. Registre uma consulta para vincular o exame.</small>
+    <% if exame.persisted? %>
+      <div style="font-size: 0.85rem; color: #6b7280;">
+        <strong>Consulta:</strong>
+        <%= exame.consulta&.display_label || "Consulta não informada" %>
+      </div>
+      <%= form.hidden_field :consulta_id %>
+    <% else %>
+      <%= form.label :consulta_id, "Consulta", style: "display: block; font-size: 0.8rem; font-weight: 600; color: #6b7280; margin-bottom: 0.35rem;" %>
+      <%= form.collection_select :consulta_id, @consultas, :id, :display_label, { include_blank: "Selecione..." }, style: "width: 100%; border: 1px solid #d1d5db; border-radius: 8px; padding: 0.7rem 0.9rem;" %>
+      <% if @consultas.empty? %>
+        <small style="color: #9ca3af;">Cadastre uma consulta antes de criar exames.</small>
+      <% end %>
     <% end %>
   </div>
 
   <div>
-    <%= form.label :tipo_exame, "Tipo de exame", style: "display: block" %>
-    <%= form.text_field :tipo_exame %>
+    <%= form.label :nome_exame, "Nome do exame", style: "display: block; font-size: 0.8rem; font-weight: 600; color: #6b7280; margin-bottom: 0.35rem;" %>
+    <%= form.text_field :nome_exame, style: "width: 100%; border: 1px solid #d1d5db; border-radius: 8px; padding: 0.7rem 0.9rem;" %>
   </div>
 
   <div>
-    <%= form.label :data_solicitacao, "Data de solicitação", style: "display: block" %>
-    <%= form.date_field :data_solicitacao %>
+    <%= form.label :status, style: "display: block; font-size: 0.8rem; font-weight: 600; color: #6b7280; margin-bottom: 0.35rem;" %>
+    <%= form.select :status, @status_options, { include_blank: "Selecione..." }, style: "width: 100%; border: 1px solid #d1d5db; border-radius: 8px; padding: 0.7rem 0.9rem;" %>
   </div>
 
   <div>
-    <%= form.label :data_marcada, style: "display: block" %>
-    <%= form.date_field :data_marcada %>
+    <%= form.label :data_exame, "Data do exame", style: "display: block; font-size: 0.8rem; font-weight: 600; color: #6b7280; margin-bottom: 0.35rem;" %>
+    <%= form.date_field :data_exame, style: "width: 100%; border: 1px solid #d1d5db; border-radius: 8px; padding: 0.7rem 0.9rem;" %>
   </div>
 
   <div>
-    <%= form.label :data_realizada, style: "display: block" %>
-    <%= form.date_field :data_realizada %>
+    <%= form.label :observacao_exame, "Observações", style: "display: block; font-size: 0.8rem; font-weight: 600; color: #6b7280; margin-bottom: 0.35rem;" %>
+    <%= form.text_area :observacao_exame, rows: 4, style: "width: 100%; border: 1px solid #d1d5db; border-radius: 8px; padding: 0.7rem 0.9rem;" %>
   </div>
 
-  <div>
-    <%= form.label :status, style: "display: block" %>
-    <%= form.select :status, @status_options, { include_blank: "Selecione..." } %>
-  </div>
-
-  <div>
-    <%= form.label :observacoes, "Observações", style: "display: block" %>
-    <%= form.text_area :observacoes %>
-  </div>
-
-  <div>
-    <%= form.submit %>
+  <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+    <% redirect_to_consulta = params[:redirect_to_consulta].present? || request.path.include?("/remarcar") %>
+    <%= hidden_field_tag :redirect_to_consulta, "1" if redirect_to_consulta %>
+    <%= link_to "Cancelar", (redirect_to_consulta ? consulta_exames_path(exame.consulta) : exames_path), style: "padding: 0.6rem 1.1rem; border: 1px solid #d1d5db; border-radius: 8px; text-decoration: none; color: #374151; font-weight: 600;" %>
+    <%= form.submit exame.new_record? ? "Criar exame" : "Atualizar exame", style: "padding: 0.6rem 1.1rem; border-radius: 8px; background: #2563eb; color: #fff; border: none; font-weight: 600; cursor: pointer;" %>
   </div>
 <% end %>

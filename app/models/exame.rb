@@ -9,8 +9,10 @@ class Exame < ApplicationRecord
   enum status: STATUS_LABELS.transform_keys(&:to_sym), _prefix: true
 
   belongs_to :consulta, inverse_of: :exames
+  has_one_attached :arquivo_resultado
 
-  validates :status, inclusion: { in: statuses.keys }
+  validates :status, inclusion: { in: statuses.keys }, allow_blank: true
+  validates :observacao_exame, length: { maximum: 1000 }, allow_blank: true
 
   delegate :medico, to: :consulta, allow_nil: true
 

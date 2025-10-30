@@ -10,16 +10,44 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_10_29_170000) do
+ActiveRecord::Schema[7.2].define(version: 2025_10_30_040610) do
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.integer "record_id", null: false
+    t.integer "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.string "service_name", null: false
+    t.bigint "byte_size", null: false
+    t.string "checksum"
+    t.datetime "created_at", null: false
+  end
+
+  create_table "active_storage_variant_records", force: :cascade do |t|
+    t.integer "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
   create_table "consultas", force: :cascade do |t|
     t.integer "medico_id"
     t.datetime "data_hora"
     t.string "tipo"
-    t.text "anamnese"
     t.text "diagnostico"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "paciente_id"
+    t.boolean "checkin", default: false, null: false
+    t.integer "status", default: 0, null: false
     t.index ["medico_id"], name: "index_consultas_on_medico_id"
     t.index ["paciente_id"], name: "index_consultas_on_paciente_id"
   end
@@ -40,14 +68,14 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_29_170000) do
 
   create_table "exames", force: :cascade do |t|
     t.integer "consulta_id", null: false
-    t.string "tipo_exame"
-    t.date "data_solicitacao"
-    t.date "data_marcada"
-    t.date "data_realizada"
+    t.string "nome_exame"
+    t.date "data_exame"
     t.string "status", default: "pendente"
-    t.text "observacoes"
+    t.text "observacao_exame"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "data_realizacao"
+    t.string "profissional_realizou_exame"
     t.index ["consulta_id"], name: "index_exames_on_consulta_id"
   end
 
@@ -88,6 +116,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_29_170000) do
     t.index ["email"], name: "index_profissionais_on_email", unique: true
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "consultas", "pacientes"
   add_foreign_key "consultas", "profissionais", column: "medico_id"
   add_foreign_key "enderecos", "pacientes"

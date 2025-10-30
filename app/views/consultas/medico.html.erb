@@ -1,0 +1,154 @@
+<% content_for :title, "Painel do Médico" %>
+
+<div class="container-xl py-4">
+  <% total_consultas = @consultas_hoje.size %>
+  <% total_checkins = @checkins_realizados.size %>
+
+  <section class="page-hero">
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-8">
+        <span class="hero-badge">
+          <i class="fas fa-user-md"></i>
+          Agenda do dia <%= l(Time.zone.today, format: :long) %>
+        </span>
+        <h1 class="display-6 fw-semibold mt-3 mb-2">Bem-vindo ao painel do médico</h1>
+        <p class="mb-0 fs-6">
+          Acompanhe rapidamente quais pacientes já realizaram check-in e planeje o atendimento das consultas agendadas para hoje.
+        </p>
+      </div>
+      <div class="col-lg-4">
+        <div class="card metrics-card mb-3">
+          <div class="card-body">
+            <p class="text-uppercase text-muted small fw-semibold mb-1">Check-ins confirmados</p>
+            <div class="metric-value"><%= total_checkins %></div>
+            <p class="mb-0 text-muted small">
+              Pacientes já chegaram para atendimento.
+            </p>
+          </div>
+        </div>
+        <div class="card metrics-card">
+          <div class="card-body">
+            <p class="text-uppercase text-muted small fw-semibold mb-1">Consultas do dia</p>
+            <div class="metric-value"><%= total_consultas %></div>
+            <p class="mb-0 text-muted small">
+              Atendimentos agendados para hoje.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-bottom: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+      <h2 style="margin: 0; font-size: 1.4rem; font-weight: 600; color: #1f2937;">Check-ins realizados</h2>
+      <span style="color: #2563eb; font-weight: 600;"><%= total_checkins %> paciente<%= "s" unless total_checkins == 1 %></span>
+    </div>
+
+    <div style="overflow-x: auto; border: 1px solid #e4e7ef; border-radius: 12px; background: #fff; box-shadow: 0 2px 6px rgba(15,23,42,0.05);">
+      <table style="width: 100%; border-collapse: collapse; font-size: 0.95rem;">
+        <thead>
+          <tr style="background: #ecfdf5; text-transform: uppercase; letter-spacing: 0.04em; color: #047857;">
+            <th style="border-bottom: 1px solid #d1fae5; padding: 0.85rem; text-align: left; min-width: 220px;">Paciente</th>
+            <th style="border-bottom: 1px solid #d1fae5; padding: 0.85rem; text-align: left; min-width: 160px;">Horário</th>
+            <th style="border-bottom: 1px solid #d1fae5; padding: 0.85rem; text-align: left; min-width: 160px;">Tipo</th>
+            <th style="border-bottom: 1px solid #d1fae5; padding: 0.85rem; text-align: left; min-width: 180px;">Profissional</th>
+            <th style="border-bottom: 1px solid #d1fae5; padding: 0.85rem; text-align: center; width: 140px;">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if @checkins_realizados.any? %>
+            <% @checkins_realizados.each do |consulta| %>
+              <tr style="border-bottom: 1px solid #eef2ff;">
+                <td style="padding: 0.85rem;">
+                  <div style="font-weight: 600; color: #1f2937;"><%= consulta.paciente&.nome || "—" %></div>
+                  <% if consulta.paciente&.cpf.present? %>
+                    <div style="font-size: 0.75rem; color: #6b7280;">CPF: <%= consulta.paciente.cpf %></div>
+                  <% end %>
+                </td>
+                <td style="padding: 0.85rem; color: #1f2937;"><%= consulta.data_hora.present? ? consulta.data_hora.strftime("%Hh%M") : "—" %></td>
+                <td style="padding: 0.85rem; color: #374151;"><%= consulta.tipo.presence || "—" %></td>
+                <td style="padding: 0.85rem; color: #374151;"><%= consulta.medico&.nome || "—" %></td>
+                <td style="padding: 0.85rem; text-align: center;">
+                  <span style="display: inline-block; padding: 0.35rem 0.75rem; border-radius: 999px; background: #15803d; color: #fff; font-weight: 600; font-size: 0.8rem;">
+                    Check-in feito
+                  </span>
+                </td>
+              </tr>
+            <% end %>
+          <% else %>
+            <tr>
+              <td colspan="5" style="padding: 1.25rem; text-align: center; color: #6b7280;">
+                Nenhum paciente realizou check-in até o momento.
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+      <h2 style="margin: 0; font-size: 1.4rem; font-weight: 600; color: #1f2937;">Consultas de hoje</h2>
+      <span style="color: #2563eb; font-weight: 600;"><%= total_consultas %> agendamento<%= "s" unless total_consultas == 1 %></span>
+    </div>
+
+    <div style="overflow-x: auto; border: 1px solid #e4e7ef; border-radius: 12px; background: #fff; box-shadow: 0 2px 6px rgba(15,23,42,0.05);">
+      <table style="width: 100%; border-collapse: collapse; font-size: 0.95rem;">
+        <thead>
+          <tr style="background: #f4f6fb; text-transform: uppercase; letter-spacing: 0.04em; color: #52606d;">
+            <th style="border-bottom: 1px solid #e4e7ef; padding: 0.85rem; text-align: left; min-width: 220px;">Paciente</th>
+            <th style="border-bottom: 1px solid #e4e7ef; padding: 0.85rem; text-align: left; min-width: 140px;">Horário</th>
+            <th style="border-bottom: 1px solid #e4e7ef; padding: 0.85rem; text-align: left; min-width: 160px;">Tipo</th>
+            <th style="border-bottom: 1px solid #e4e7ef; padding: 0.85rem; text-align: left; min-width: 180px;">Profissional</th>
+            <th style="border-bottom: 1px solid #e4e7ef; padding: 0.85rem; text-align: center; min-width: 140px;">Check-in</th>
+            <th style="border-bottom: 1px solid #e4e7ef; padding: 0.85rem; text-align: center; min-width: 140px;">Status</th>
+            <th style="border-bottom: 1px solid #e4e7ef; padding: 0.85rem; text-align: center; min-width: 160px;">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if @consultas_hoje.any? %>
+            <% @consultas_hoje.each do |consulta| %>
+              <tr style="border-bottom: 1px solid #eef1f7;">
+                <td style="padding: 0.85rem;">
+                  <div style="font-weight: 600; color: #1f2937;"><%= consulta.paciente&.nome || "—" %></div>
+                  <% if consulta.paciente&.celular.present? %>
+                    <div style="font-size: 0.75rem; color: #6b7280;">Contato: <%= consulta.paciente.celular %></div>
+                  <% end %>
+                </td>
+                <td style="padding: 0.85rem; color: #1f2937;"><%= consulta.data_hora.present? ? consulta.data_hora.strftime("%Hh%M") : "—" %></td>
+                <td style="padding: 0.85rem; color: #374151;"><%= consulta.tipo.presence || "—" %></td>
+                <td style="padding: 0.85rem; color: #374151;"><%= consulta.medico&.nome || "—" %></td>
+                <td style="padding: 0.85rem; text-align: center;">
+                  <% if consulta.checkin? %>
+                    <span style="display: inline-block; padding: 0.35rem 0.75rem; border-radius: 999px; background: #dcfce7; color: #15803d; font-weight: 600; font-size: 0.8rem;">Realizado</span>
+                  <% else %>
+                    <span style="display: inline-block; padding: 0.35rem 0.75rem; border-radius: 999px; background: #fee2e2; color: #b91c1c; font-weight: 600; font-size: 0.8rem;">Pendente</span>
+                  <% end %>
+                </td>
+                <td style="padding: 0.85rem; text-align: center;">
+                  <% status_labels = { "agendado" => "Agendado", "atendido" => "Atendido", "faltou" => "Faltou", "finalizado" => "Finalizado" } %>
+                  <span style="display: inline-block; padding: 0.35rem 0.75rem; border-radius: 999px; background: #e0e7ff; color: #4338ca; font-weight: 600; font-size: 0.8rem;">
+                    <%= status_labels.fetch(consulta.status, consulta.status.to_s.humanize) %>
+                  </span>
+                </td>
+                <td style="padding: 0.85rem; text-align: center;">
+                  <%= link_to "Iniciar atendimento",
+                              iniciar_atendimento_consulta_path(consulta),
+                              style: "display: inline-block; padding: 0.45rem 0.95rem; border-radius: 8px; background: #2563eb; color: #fff; font-weight: 600; text-decoration: none; box-shadow: 0 4px 12px rgba(37,99,235,0.25);" %>
+                </td>
+              </tr>
+            <% end %>
+          <% else %>
+            <tr>
+              <td colspan="7" style="padding: 1.25rem; text-align: center; color: #6b7280;">
+                Não há consultas agendadas para hoje.
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>

@@ -2,18 +2,14 @@
 
 one:
   consulta: one
-  tipo_exame: Topografia
-  data_solicitacao: 2025-10-28
-  data_marcada: 2025-11-02
-  data_realizada: 
+  nome_exame: Topografia
+  data_exame: 2025-11-02
   status: pendente
-  observacoes: Exame solicitado para acompanhamento.
+  observacao_exame: Exame solicitado para acompanhamento.
 
 two:
   consulta: two
-  tipo_exame: Campimetria
-  data_solicitacao: 2025-10-25
-  data_marcada: 2025-10-30
-  data_realizada: 2025-10-30
+  nome_exame: Campimetria
+  data_exame: 2025-10-30
   status: realizado
-  observacoes: Resultado anexado ao prontuário.
+  observacao_exame: Resultado anexado ao prontuário.

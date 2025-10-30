@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
+  <% page_title = content_for?(:title) ? content_for(:title) : "Modulo S.U.S" %>
   <head>
-    <title><%= content_for(:title) || "Modulo S.U.S" %></title>
+    <meta charset="utf-8">
+    <title><%= page_title %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
@@ -17,31 +19,70 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
+  <% body_classes = ["app-body", controller_path.tr("/", "-"), action_name] %>
+  <% body_classes << content_for(:body_class) if content_for?(:body_class) %>
+  <body class="<%= body_classes.join(" ") %>">
+    <a class="skip-link" href="#main-content">Ir para o conteúdo principal</a>
+
     <header class="app-header" data-controller="menu">
-      <button class="hamburger" type="button" aria-label="Abrir menu" aria-expanded="false" data-action="click->menu#toggle" data-menu-target="button">
+      <button class="hamburger"
+              type="button"
+              aria-label="Abrir menu"
+              aria-expanded="false"
+              aria-controls="primary-navigation"
+              data-action="click->menu#toggle"
+              data-menu-target="button">
         <span></span>
         <span></span>
         <span></span>
       </button>
+
       <div class="app-title">
-        <%= content_for(:title) || "Modulo S.U.S" %>
+        <%= link_to page_title, root_path, style: "color: inherit; text-decoration: none;" %>
       </div>
 
-      <nav class="menu" data-menu-target="panel" aria-hidden="true">
+      <nav class="menu"
+           id="primary-navigation"
+           aria-label="Menu principal"
+           data-menu-target="panel"
+           aria-hidden="true">
         <ul>
-          <li><%= link_to "Pacientes", pacientes_path %></li>
-          <li><%= link_to "Profissionais", profissionais_path %></li>
-          <li><%= link_to "Consultas", consultas_path %></li>
-          <li><%= link_to "Exames", exames_path %></li>
-          <li><%= link_to "Endereços", enderecos_path %></li>
+          <% [
+            { label: "Consultas", path: consultas_path },
+            { label: "Painel Médico", path: medico_consultas_path },
+            { label: "Pacientes", path: pacientes_path },
+            { label: "Profissionais", path: profissionais_path },
+            { label: "Exames", path: exames_path },
+            { label: "Endereços", path: enderecos_path }
+          ].each do |item| %>
+            <% active = current_page?(item[:path]) %>
+            <li class="<%= active ? "active" : nil %>">
+              <%= link_to item[:label], item[:path] %>
+            </li>
+          <% end %>
         </ul>
       </nav>
       <div class="menu-backdrop" data-menu-target="backdrop" data-action="click->menu#close"></div>
     </header>
 
-    <main class="app-main">
-      <%= yield %>
-    </main>
+    <div class="app-shell">
+      <% if flash.any? %>
+        <div class="flash-container" role="region" aria-live="polite">
+          <% flash.each do |type, message| %>
+            <% next if message.blank? %>
+            <% role = type.to_sym == :alert ? "alert" : "status" %>
+            <div class="flash flash-<%= type %>" role="<%= role %>">
+              <%= message %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+
+      <main id="main-content" class="app-main" tabindex="-1">
+        <%= yield %>
+      </main>
+
+      <%= yield :after_main %>
+    </div>
   </body>
 </html>
