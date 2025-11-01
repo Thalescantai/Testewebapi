@@ -8,6 +8,8 @@ Rails.application.routes.draw do
     end
   end
   get "consultas/:consulta_id/exames", to: "exames#por_consulta", as: :consulta_exames
+  resources :materiais, only: :index
+  get "consultas/:consulta_id/materiais", to: "materiais#por_consulta", as: :consulta_materiais
   resources :consultas do
     member do
       patch :checkin

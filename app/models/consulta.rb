@@ -1,6 +1,7 @@
 class Consulta < ApplicationRecord
   belongs_to :paciente
   has_many :exames, dependent: :destroy
+  has_many :materials, dependent: :destroy
   belongs_to :medico, class_name: "Profissional", optional: true, inverse_of: :consultas
 
   enum status: { agendado: 0, atendido: 1, faltou: 2, finalizado: 3 }
@@ -8,6 +9,7 @@ class Consulta < ApplicationRecord
   after_initialize :set_default_status, if: :new_record?
 
   accepts_nested_attributes_for :exames, allow_destroy: true, reject_if: :all_blank
+  accepts_nested_attributes_for :materials, allow_destroy: true, reject_if: :all_blank
 
   validates :data_hora, presence: true
   validates :paciente, presence: true

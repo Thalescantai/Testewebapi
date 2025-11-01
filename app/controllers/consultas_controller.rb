@@ -29,7 +29,7 @@ class ConsultasController < ApplicationController
     @selected_professional_id = params[:professional_id].presence
     @search_term = params[:search].to_s.strip
 
-    @consultas = Consulta.includes(:medico, :exames, paciente: :endereco)
+    @consultas = Consulta.includes(:medico, :exames, :materials, paciente: :endereco)
     @consultas = apply_date_time_filter(@consultas)
     @consultas = @consultas.where(medico_id: @selected_professional_id) if @selected_professional_id.present?
     @consultas = apply_status_filter(@consultas)
@@ -132,16 +132,18 @@ class ConsultasController < ApplicationController
   private
 
   def set_consulta
-    @consulta = Consulta.includes(:exames).find(params[:id])
+    @consulta = Consulta.includes(:exames, :materials).find(params[:id])
     @paciente = @consulta.paciente
-    if %w[edit iniciar_atendimento].include?(action_name) && @consulta.exames.empty?
-      @consulta.exames.build
+    if %w[edit iniciar_atendimento].include?(action_name)
+      @consulta.exames.build if @consulta.exames.empty?
+      @consulta.materials.build if @consulta.materials.empty?
     end
   end
 
   def consulta_params
     params.require(:consulta).permit(:medico_id, :paciente_id, :data_hora, :tipo, :diagnostico, :checkin, :status,
-                                     exames_attributes: %i[id nome_exame data_exame observacao_exame status _destroy])
+                                     exames_attributes: %i[id nome_exame data_exame observacao_exame status _destroy],
+                                     materials_attributes: %i[id nome_material quantidade data_pedido verificar_estoque _destroy])
   end
 
   def set_profissional_options

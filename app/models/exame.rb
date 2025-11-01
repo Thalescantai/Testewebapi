@@ -11,6 +11,8 @@ class Exame < ApplicationRecord
   belongs_to :consulta, inverse_of: :exames
   has_one_attached :arquivo_resultado
 
+  accepts_nested_attributes_for :consulta, update_only: true
+
   validates :status, inclusion: { in: statuses.keys }, allow_blank: true
   validates :observacao_exame, length: { maximum: 1000 }, allow_blank: true
 

@@ -1,5 +1,6 @@
 <% paciente ||= @paciente || consulta.paciente %>
 <% show_exams = local_assigns.fetch(:show_exams, true) %>
+<% show_materials = local_assigns.fetch(:show_materials, true) %>
 <% show_diagnostico = local_assigns.fetch(:show_diagnostico, true) %>
 <% submit_label = local_assigns.fetch(:submit_label, consulta.new_record? ? "Salvar consulta" : "Atualizar consulta") %>
 <% finalize = local_assigns.fetch(:finalize, false) %>
@@ -108,6 +109,38 @@
           <div data-nested-form-target="container">
             <%= form.fields_for :exames do |exame_form| %>
               <%= render "consultas/exame_fields", f: exame_form %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <% if show_materials %>
+      <div style="margin-top: 1.75rem;">
+        <div data-controller="nested-form"
+             data-nested-form-wrapper-selector-value=".material-fields"
+             data-nested-form-max-items-value="15">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem;">
+            <div style="font-size: 0.9rem; font-weight: 700; color: #1f2937; text-transform: uppercase; letter-spacing: 0.05em;">
+              Materiais solicitados
+            </div>
+            <%= button_tag type: :button,
+                           class: "add-material-button",
+                           data: { action: "click->nested-form#add", nested_form_target: "addButton" },
+                           style: "padding: 0.55rem 1rem; border: 1px dashed #2563eb; border-radius: 8px; background: rgba(37,99,235,0.08); color: #2563eb; font-weight: 600; cursor: pointer;" do %>
+              + Solicitar material
+            <% end %>
+          </div>
+
+          <template data-nested-form-target="template">
+            <%= form.fields_for :materials, Material.new, child_index: "NEW_RECORD" do |material_form| %>
+              <%= render "consultas/material_fields", f: material_form %>
+            <% end %>
+          </template>
+
+          <div data-nested-form-target="container">
+            <%= form.fields_for :materials do |material_form| %>
+              <%= render "consultas/material_fields", f: material_form %>
             <% end %>
           </div>
         </div>

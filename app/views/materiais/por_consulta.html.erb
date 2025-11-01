@@ -1,0 +1,51 @@
+<% content_for :title, "Materiais do paciente" %>
+
+<div class="container-xl py-4">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <h1 style="margin: 0; font-size: 2rem; font-weight: 600; color: #1f2937;">
+        <%= @consulta.paciente&.nome || "Paciente não informado" %>
+      </h1>
+      <p style="margin: 0.4rem 0 0; color: #6b7280;">
+        Consulta realizada em <%= @consulta.data_hora.present? ? l(@consulta.data_hora, format: :long) : "data não informada" %>
+        com <%= @consulta.medico&.nome || "profissional não informado" %>.
+      </p>
+    </div>
+    <div>
+      <%= link_to "Voltar para fila de materiais",
+                  materiais_path,
+                  style: "display: inline-block; padding: 0.55rem 1.1rem; border-radius: 8px; background: #e5e7eb; color: #374151; text-decoration: none; font-weight: 600;" %>
+    </div>
+  </div>
+
+  <div style="display: grid; gap: 1rem;">
+    <% if @materiais.any? %>
+      <% @materiais.each do |material| %>
+        <div style="border: 1px solid #e4e7ef; border-radius: 12px; padding: 1.25rem; background: #fff; box-shadow: 0 2px 6px rgba(15,23,42,0.05);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; gap: 1rem; flex-wrap: wrap;">
+            <div>
+              <div style="font-size: 1.1rem; font-weight: 600; color: #1f2937;"><%= material.nome_material.presence || "Material não especificado" %></div>
+              <div style="color: #6b7280; font-size: 0.9rem;">
+                <strong>Quantidade:</strong> <%= material.quantidade %>
+              </div>
+            </div>
+            <div style="font-size: 0.9rem; color: #2563eb; font-weight: 600;">
+              Pedido em: <%= l(material.data_pedido) %>
+            </div>
+          </div>
+
+          <div style="margin-top: 0.75rem; color: #4b5563; font-size: 0.9rem;">
+            <strong>Verificação de estoque:</strong>
+            <span style="margin-left: 0.35rem; color: <%= material.verificar_estoque? ? '#16a34a' : '#6b7280' %>; font-weight: 600;">
+              <%= material.verificar_estoque? ? "Solicitada" : "Não necessário" %>
+            </span>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <div style="padding: 1.25rem; border-radius: 12px; border: 1px dashed #cbd5f5; background: #eef2ff; color: #4338ca;">
+        Nenhum material registrado para esta consulta.
+      </div>
+    <% end %>
+  </div>
+</div>

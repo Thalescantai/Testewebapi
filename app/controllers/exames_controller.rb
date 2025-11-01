@@ -28,7 +28,8 @@ class ExamesController < ApplicationController
 
   def concluir_realizacao
     realizacao_attrs = exame_realizacao_params
-    houve_dados = realizacao_attrs.values.any?(&:present?)
+    exames_campos = realizacao_attrs.except(:consulta_attributes)
+    houve_dados = exames_campos.values.any?(&:present?)
 
     @exame.assign_attributes(realizacao_attrs)
     @exame.status = :realizado if houve_dados
@@ -111,7 +112,11 @@ class ExamesController < ApplicationController
     end
 
     def exame_realizacao_params
-      params.require(:exame).permit(:data_realizacao, :profissional_realizou_exame, :arquivo_resultado)
+      params.require(:exame).permit(:data_realizacao, :profissional_realizou_exame, :arquivo_resultado,
+                                    consulta_attributes: [
+                                      :id,
+                                      { materials_attributes: %i[id nome_material quantidade data_pedido verificar_estoque _destroy] }
+                                    ])
     end
 
     def set_collections

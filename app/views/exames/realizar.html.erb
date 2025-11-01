@@ -55,6 +55,38 @@
           <% end %>
         </div>
 
+        <% form.fields_for :consulta, @exame.consulta do |consulta_fields| %>
+          <div style="margin-top: 1rem;">
+            <div data-controller="nested-form"
+                 data-nested-form-wrapper-selector-value=".material-fields"
+                 data-nested-form-max-items-value="15">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem; flex-wrap: wrap; gap: 0.75rem;">
+                <div>
+                  <div style="font-size: 0.95rem; font-weight: 700; color: #1f2937;">Solicitações de materiais</div>
+                  <p style="margin: 0.3rem 0 0; color: #6b7280; font-size: 0.85rem;">Registre materiais adicionais necessários para este exame.</p>
+                </div>
+                <%= button_tag type: :button,
+                               data: { action: "click->nested-form#add", nested_form_target: "addButton" },
+                               style: "padding: 0.55rem 1rem; border: 1px dashed #2563eb; border-radius: 8px; background: rgba(37,99,235,0.08); color: #2563eb; font-weight: 600; cursor: pointer;" do %>
+                  + Solicitar material
+                <% end %>
+              </div>
+
+              <template data-nested-form-target="template">
+                <%= consulta_fields.fields_for :materials, Material.new, child_index: "NEW_RECORD" do |material_form| %>
+                  <%= render "consultas/material_fields", f: material_form %>
+                <% end %>
+              </template>
+
+              <div data-nested-form-target="container">
+                <%= consulta_fields.fields_for :materials do |material_form| %>
+                  <%= render "consultas/material_fields", f: material_form %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+
         <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
           <%= link_to "Cancelar",
                       consulta_exames_path(@exame.consulta),

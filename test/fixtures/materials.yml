@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  consulta: one
+  nome_material: MyString
+  quantidade: 1
+  data_pedido: 2025-10-31
+  verificar_estoque: false
+
+two:
+  consulta: two
+  nome_material: MyString
+  quantidade: 1
+  data_pedido: 2025-10-31
+  verificar_estoque: false
