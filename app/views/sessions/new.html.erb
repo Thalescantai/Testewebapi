@@ -1,0 +1,69 @@
+<% content_for :title, "Acessar o sistema" %>
+<% content_for :body_class, "auth-page" %>
+
+<div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; background: linear-gradient(135deg, #0f172a, #1d4ed8);">
+  <div style="width: 100%; max-width: 1120px; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; background: rgba(15, 23, 42, 0.4); border-radius: 18px; overflow: hidden; box-shadow: 0 15px 45px rgba(15, 23, 42, 0.45);">
+    <div style="background: rgba(15, 23, 42, 0.75); padding: 3rem; color: #f3f4f6; display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="display: inline-flex; align-items: center; gap: 0.65rem; background: rgba(37, 99, 235, 0.25); padding: 0.4rem 0.9rem; border-radius: 999px; font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600;">
+          <i class="fas fa-hospital"></i>
+          Modulo S.U.S
+        </div>
+        <h2 style="margin-top: 1.5rem; font-size: 2.1rem; font-weight: 700; line-height: 1.3;">
+          Bem-vindo ao painel integrado de gestão hospitalar.
+        </h2>
+        <p style="margin-top: 0.8rem; color: #cbd5f5; font-size: 0.95rem; line-height: 1.6;">
+          Acesse com seu CPF e senha para acompanhar consultas, exames, solicitações e recursos assistenciais em tempo real.
+        </p>
+      </div>
+      <div style="margin-top: 2.5rem; font-size: 0.85rem; color: #94a3b8;">
+        Em caso de dúvidas, contate a equipe administrativa ou utilize o fluxo de recuperação de senha.
+      </div>
+    </div>
+
+    <div style="background: #f8fafc; padding: 3rem;">
+      <div style="margin-bottom: 1.5rem;">
+        <h1 style="margin: 0; font-size: 1.75rem; font-weight: 700; color: #111827;">Acesse sua conta</h1>
+        <p style="margin: 0.35rem 0 0; color: #6b7280; font-size: 0.95rem;">Insira seu CPF e senha cadastrados para continuar.</p>
+      </div>
+
+      <%= form_with url: login_path, scope: :session, local: true, html: { style: "display: grid; gap: 1.15rem;" } do |form| %>
+        <div>
+          <label for="session_cpf" style="display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.45rem;">
+            CPF
+          </label>
+          <%= form.text_field :cpf,
+                              placeholder: "000.000.000-00",
+                              inputmode: "numeric",
+                              autocomplete: "username",
+                              data: { controller: "cpf-mask", action: "input->cpf-mask#format blur->cpf-mask#format" },
+                              style: "width: 100%; border: 1px solid #d1d5db; border-radius: 10px; padding: 0.85rem 1rem; font-size: 1rem; color: #111827; background: #fff;" %>
+        </div>
+
+        <div>
+          <label for="session_password" style="display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.45rem;">
+            Senha
+          </label>
+          <%= form.password_field :password,
+                                  placeholder: "Sua senha",
+                                  autocomplete: "current-password",
+                                  style: "width: 100%; border: 1px solid #d1d5db; border-radius: 10px; padding: 0.85rem 1rem; font-size: 1rem; color: #111827; background: #fff;" %>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+          <label style="display: inline-flex; align-items: center; gap: 0.6rem; font-size: 0.9rem; color: #4b5563; font-weight: 500;">
+            <%= form.check_box :remember_me, { style: "width: 18px; height: 18px; border: 1px solid #d1d5db; border-radius: 4px;" }, "1", "0" %>
+            Lembrar-me neste dispositivo
+          </label>
+          <%= link_to "Esqueceu sua senha?", forgot_password_path, style: "font-size: 0.9rem; color: #2563eb; font-weight: 600; text-decoration: none;" %>
+        </div>
+
+        <%= form.submit "Entrar", style: "padding: 0.85rem 1rem; border-radius: 10px; border: none; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; font-weight: 700; letter-spacing: 0.04em; cursor: pointer; box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35);" %>
+      <% end %>
+
+      <div style="margin-top: 1.75rem; font-size: 0.85rem; color: #94a3b8;">
+        Este ambiente é restrito a profissionais autorizados. O uso indevido pode ser rastreado.
+      </div>
+    </div>
+  </div>
+</div>

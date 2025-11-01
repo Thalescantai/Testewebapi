@@ -7,3 +7,10 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+User.find_or_initialize_by(cpf: "03385843235").tap do |user|
+  user.name = "Thales Cantai"
+  user.password = "123456"
+  user.password_confirmation = "123456"
+  user.save!
+end

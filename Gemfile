@@ -17,6 +17,9 @@ gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
+# Authentication
+gem "bcrypt", "~> 3.1.7"
+
 gem "ransack"
 gem "kaminari"
 

@@ -24,47 +24,61 @@
   <body class="<%= body_classes.join(" ") %>">
     <a class="skip-link" href="#main-content">Ir para o conteúdo principal</a>
 
-    <header class="app-header" data-controller="menu">
-      <button class="hamburger"
-              type="button"
-              aria-label="Abrir menu"
-              aria-expanded="false"
-              aria-controls="primary-navigation"
-              data-action="click->menu#toggle"
-              data-menu-target="button">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
+    <% if logged_in? %>
+      <header class="app-header" data-controller="menu">
+        <button class="hamburger"
+                type="button"
+                aria-label="Abrir menu"
+                aria-expanded="false"
+                aria-controls="primary-navigation"
+                data-action="click->menu#toggle"
+                data-menu-target="button">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
 
-      <div class="app-title">
-        <%= link_to page_title, root_path, style: "color: inherit; text-decoration: none;" %>
-      </div>
+        <div class="app-title">
+          <%= link_to page_title, root_path, style: "color: inherit; text-decoration: none;" %>
+        </div>
 
-      <nav class="menu"
-           id="primary-navigation"
-           aria-label="Menu principal"
-           data-menu-target="panel"
-           aria-hidden="true">
-        <ul>
-          <% [
-            { label: "Consultas", path: consultas_path },
-            { label: "Painel Médico", path: medico_consultas_path },
-            { label: "Pacientes", path: pacientes_path },
-            { label: "Profissionais", path: profissionais_path },
-            { label: "Exames", path: exames_path },
-            { label: "Materiais", path: materiais_path },
-            { label: "Endereços", path: enderecos_path }
-          ].each do |item| %>
-            <% active = current_page?(item[:path]) %>
-            <li class="<%= active ? "active" : nil %>">
-              <%= link_to item[:label], item[:path] %>
-            </li>
-          <% end %>
-        </ul>
-      </nav>
-      <div class="menu-backdrop" data-menu-target="backdrop" data-action="click->menu#close"></div>
-    </header>
+        <nav class="menu"
+             id="primary-navigation"
+             aria-label="Menu principal"
+             data-menu-target="panel"
+             aria-hidden="true">
+          <ul>
+            <% [
+              { label: "Consultas", path: consultas_path },
+              { label: "Painel Médico", path: medico_consultas_path },
+              { label: "Pacientes", path: pacientes_path },
+              { label: "Profissionais", path: profissionais_path },
+              { label: "Exames", path: exames_path },
+              { label: "Materiais", path: materiais_path },
+              { label: "Estoque", path: "#" },
+              { label: "Gerar documentos", path: "#" },
+              { label: "Endereços", path: enderecos_path }
+            ].each do |item| %>
+              <% active = current_page?(item[:path]) %>
+              <li class="<%= active ? "active" : nil %>">
+                <%= link_to item[:label], item[:path] %>
+              </li>
+            <% end %>
+          </ul>
+        </nav>
+        <div style="margin-left: auto; display: inline-flex; align-items: center; gap: 0.75rem;">
+          <span style="font-size: 0.9rem; color: #475569; font-weight: 600;">
+            <i class="fas fa-user-circle" style="margin-right: 0.35rem;"></i>
+            <%= current_user&.name %>
+          </span>
+          <%= link_to "Sair",
+                      logout_path,
+                      data: { turbo_method: :delete, turbo_confirm: "Tem certeza que deseja sair?" },
+                      style: "padding: 0.45rem 0.9rem; border-radius: 8px; border: 1px solid #d1d5db; font-weight: 600; color: #ef4444; text-decoration: none;" %>
+        </div>
+        <div class="menu-backdrop" data-menu-target="backdrop" data-action="click->menu#close"></div>
+      </header>
+    <% end %>
 
     <div class="app-shell">
       <% if flash.any? %>

@@ -1,4 +1,11 @@
 Rails.application.routes.draw do
+  get "/login", to: "sessions#new"
+  post "/login", to: "sessions#create"
+  delete "/logout", to: "sessions#destroy"
+
+  get "/esqueci-minha-senha", to: "passwords#new", as: :forgot_password
+  post "/esqueci-minha-senha", to: "passwords#create"
+
   resources :profissionais
   resources :exames do
     member do
