@@ -57,7 +57,11 @@
 
       <div style="min-width: 0;">
         <%= form.label :cep, "CEP", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
-        <%= form.text_field :cep, placeholder: "00000-000", inputmode: "numeric", style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
+        <%= form.text_field :cep,
+                            placeholder: "00000-000",
+                            inputmode: "numeric",
+                            data: { controller: "cep-mask", action: "input->cep-mask#format blur->cep-mask#format" },
+                            style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
       </div>
 
       <div style="min-width: 0;">

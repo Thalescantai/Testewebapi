@@ -1,20 +1,27 @@
 <div class="material-fields" data-nested-form-target="item" style="margin-bottom: 1rem; border: 1px solid #e4e7ef; border-radius: 10px; padding: 1rem; background: #f9fafc; position: relative;">
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.15rem;">
     <div>
       <%= f.label :nome_material, "Material solicitado", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
-      <%= f.text_field :nome_material, style: "width: 100%; border: 1px solid #d1d5db; border-radius: 8px; padding: 0.65rem 0.8rem; font-size: 0.95rem; color: #1f2937;" %>
+      <%= f.text_field :nome_material,
+                       placeholder: "Ex.: Curativo estéril, seringa 5ml...",
+                       style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
     </div>
     <div>
       <%= f.label :quantidade, "Quantidade", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
-      <%= f.number_field :quantidade, min: 1, step: 1, style: "width: 100%; border: 1px solid #d1d5db; border-radius: 8px; padding: 0.65rem 0.8rem; font-size: 0.95rem; color: #1f2937;" %>
+      <%= f.number_field :quantidade,
+                         min: 1,
+                         step: 1,
+                         inputmode: "numeric",
+                         style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
     </div>
     <div>
       <%= f.label :data_pedido, "Data do pedido", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
-      <%= f.date_field :data_pedido, style: "width: 100%; border: 1px solid #d1d5db; border-radius: 8px; padding: 0.65rem 0.8rem; font-size: 0.95rem; color: #1f2937;" %>
+      <%= f.date_field :data_pedido,
+                       style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.7rem 0.9rem; font-size: 0.95rem; color: #1f2937; background: #fff;" %>
     </div>
     <div style="display: flex; flex-direction: column; justify-content: flex-end;">
-      <label style="display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; color: #1f2937; font-weight: 600;">
-        <%= f.check_box :verificar_estoque, style: "width: 18px; height: 18px;" %>
+      <label style="display: inline-flex; align-items: center; gap: 0.6rem; font-size: 0.9rem; color: #1f2937; font-weight: 600;">
+        <%= f.check_box :verificar_estoque, style: "width: 18px; height: 18px; border: 1px solid #e4e7ef; border-radius: 4px;" %>
         Solicitar verificação de estoque
       </label>
     </div>

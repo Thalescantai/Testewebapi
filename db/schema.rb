@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_10_30_040610) do
+ActiveRecord::Schema[7.2].define(version: 2025_11_01_020134) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -79,6 +79,17 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_30_040610) do
     t.index ["consulta_id"], name: "index_exames_on_consulta_id"
   end
 
+  create_table "materials", force: :cascade do |t|
+    t.integer "consulta_id", null: false
+    t.string "nome_material", null: false
+    t.integer "quantidade", default: 1, null: false
+    t.date "data_pedido", null: false
+    t.boolean "verificar_estoque", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["consulta_id"], name: "index_materials_on_consulta_id"
+  end
+
   create_table "pacientes", force: :cascade do |t|
     t.string "nome"
     t.string "cpf"
@@ -122,4 +133,5 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_30_040610) do
   add_foreign_key "consultas", "profissionais", column: "medico_id"
   add_foreign_key "enderecos", "pacientes"
   add_foreign_key "exames", "consultas"
+  add_foreign_key "materials", "consultas"
 end

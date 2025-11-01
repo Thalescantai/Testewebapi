@@ -63,7 +63,15 @@
 
       <div style="min-width: 0;">
         <%= form.label :raca, "Raça/Cor", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
-        <%= form.text_field :raca, placeholder: "Auto declaração", style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
+        <%= form.select :raca,
+                        [["Branca", "branca"],
+                         ["Preta", "preta"],
+                         ["Parda", "parda"],
+                         ["Amarela", "amarela"],
+                         ["Indígena", "indigena"],
+                         ["Não declarada", "nao_declarada"]],
+                        { include_blank: "Selecione..." },
+                        { style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.7rem 0.9rem; font-size: 0.95rem; color: #1f2937; background: #fff;" } %>
       </div>
     </div>
 
@@ -99,7 +107,12 @@
 
       <div style="min-width: 0;">
         <%= form.label :cartao_sus, "Cartão SUS", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
-        <%= form.text_field :cartao_sus, placeholder: "Número do cartão SUS", style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
+        <%= form.text_field :cartao_sus,
+                            placeholder: "000 0000 0000 0000",
+                            inputmode: "numeric",
+                            maxlength: 18,
+                            style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;",
+                            data: { controller: "cartao-sus-mask", action: "input->cartao-sus-mask#format blur->cartao-sus-mask#format" } %>
       </div>
     </div>
 
@@ -145,12 +158,30 @@
 
       <div style="min-width: 0;">
         <%= form.label :escolaridade, "Escolaridade", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
-        <%= form.text_field :escolaridade, style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
+        <%= form.select :escolaridade,
+                        [["Sem instrução", "sem_instrucao"],
+                         ["Fundamental incompleto", "fundamental_incompleto"],
+                         ["Fundamental completo", "fundamental_completo"],
+                         ["Médio incompleto", "medio_incompleto"],
+                         ["Médio completo", "medio_completo"],
+                         ["Superior incompleto", "superior_incompleto"],
+                         ["Superior completo", "superior_completo"],
+                         ["Pós-graduação", "pos_graduacao"]],
+                        { include_blank: "Selecione..." },
+                        { style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.7rem 0.9rem; font-size: 0.95rem; color: #1f2937; background: #fff;" } %>
       </div>
 
       <div style="min-width: 0;">
         <%= form.label :estado_civil, "Estado civil", style: "display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;" %>
-        <%= form.text_field :estado_civil, style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.75rem 0.9rem; font-size: 0.95rem; color: #1f2937;" %>
+        <%= form.select :estado_civil,
+                        [["Solteiro(a)", "solteiro"],
+                         ["Casado(a)", "casado"],
+                         ["União estável", "uniao_estavel"],
+                         ["Divorciado(a)", "divorciado"],
+                         ["Separado(a)", "separado"],
+                         ["Viúvo(a)", "viuvo"]],
+                        { include_blank: "Selecione..." },
+                        { style: "width: 100%; border: 1px solid #e4e7ef; border-radius: 8px; padding: 0.7rem 0.9rem; font-size: 0.95rem; color: #1f2937; background: #fff;" } %>
       </div>
 
       <div style="min-width: 0;">
