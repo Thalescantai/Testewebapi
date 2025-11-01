@@ -1,6 +1,21 @@
 class ConsultasController < ApplicationController
   STATUS_FILTERS = %w[todos checkin_realizado agendado atendido_recepcao pacientes_atendidos cancelado].freeze
+  STATUS_FILTER_LABELS = {
+    "todos" => "Todos",
+    "checkin_realizado" => "Check-In Realizado",
+    "agendado" => "Agendado",
+    "atendido_recepcao" => "Atendido na Recepção",
+    "pacientes_atendidos" => "Pacientes Atendidos",
+    "cancelado" => "Cancelado"
+  }.freeze
   TIME_FILTERS = %w[day 1h 2h 4h check_in].freeze
+  TIME_FILTER_LABELS = {
+    "day" => "Dia",
+    "1h" => "1h",
+    "2h" => "2h",
+    "4h" => "4h",
+    "check_in" => "Check-In"
+  }.freeze
 
   before_action :set_consulta, only: %i[show edit update destroy checkin iniciar_atendimento]
   before_action :set_profissional_options, only: %i[new edit create update iniciar_atendimento index]
@@ -20,6 +35,8 @@ class ConsultasController < ApplicationController
     @consultas = apply_status_filter(@consultas)
     @consultas = apply_search_filter(@consultas)
     @consultas = @consultas.order(:data_hora)
+    @status_filter_options = STATUS_FILTER_LABELS
+    @time_filter_options = TIME_FILTER_LABELS
   end
 
   def medico

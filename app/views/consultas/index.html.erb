@@ -4,7 +4,10 @@
 
 <div class="container-xl py-4">
   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem;">
-    <h1 style="margin: 0; font-size: 2rem; font-weight: 600; color: #1f2937;">Consultas agendadas</h1>
+    <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+      <h1 style="margin: 0; font-size: 2rem; font-weight: 600; color: #1f2937;">Consultas agendadas</h1>
+      <span style="font-size: 0.9rem; color: #6b7280;">Agora: <%= Time.zone.now.strftime("%d/%m/%Y %H:%M") %></span>
+    </div>
     <%= link_to "Nova consulta", new_consulta_path, style: "display: inline-block; padding: 0.65rem 1rem; background: #2563eb; color: #fff; text-decoration: none; border-radius: 8px; font-weight: 600;" %>
   </div>
 
@@ -61,21 +64,8 @@
     status_filter: @status_filter,
     time_filter: @time_filter
   }.compact %>
-  <% status_filters = {
-    "todos" => "Todos",
-    "checkin_realizado" => "Check-In Realizado",
-    "agendado" => "Agendado",
-    "atendido_recepcao" => "Atendido na Recepção",
-    "pacientes_atendidos" => "Pacientes Atendidos",
-    "cancelado" => "Cancelado"
-  } %>
-  <% time_filters = {
-    "day" => "Dia",
-    "1h" => "1h",
-    "2h" => "2h",
-    "4h" => "4h",
-    "check_in" => "Check-In"
-  } %>
+  <% status_filters = @status_filter_options %>
+  <% time_filters = @time_filter_options %>
 
   <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.25rem;">
     <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
